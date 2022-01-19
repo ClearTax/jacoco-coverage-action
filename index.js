@@ -8,7 +8,8 @@ async function run () {
     const minCoverage = parseFloat(
       core.getInput("min-coverage")
     );
-    await report(reportPaths, minCoverage)
+    const badgePath = core.getInput("badgePath");
+    await report(reportPaths, minCoverage,badgePath)
   } catch (error) {
     core.setFailed(error.message)
   }

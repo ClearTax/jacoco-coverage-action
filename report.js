@@ -1,19 +1,47 @@
 const core = require('@actions/core')
 const table = require('markdown-table')
 const replaceComment = require('@aki77/actions-replace-comment')
+const gradientBadge = require('gradient-badge');
+
+
 const github = require('@actions/github')
 const fs = require('fs')
 const csv = require('csv-parser')
 
-const report = async(files, threshold) => {
+
+const report = async(files, threshold,badgePath) => {
     const moduleCoverage  = await filterReport(files)
-    const overAllCoverage = await overallCoverage(moduleCoverage)
+    const overAllCoverageVal = await overallCoverage(moduleCoverage)
     
-    const pullRequestId = github.context.issue.number
-    if (pullRequestId) {
-        await markdownTable(pullRequestId, moduleCoverage, overAllCoverage, threshold)
+    const issue_number = github.context.issue.number
+
+    if (issue_number) {
+        let bodyText = await markdownTable(moduleCoverage, overAllCoverageVal, threshold)
+        core.info(bodyText)
+        await replaceComment.default({
+            token: core.getInput('token', { required: true }),
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            issue_number: issue_number,
+            body: bodyText
+        })
     }
-    await checkCoverageThreshold(overAllCoverage, threshold)
+    const svgString = gradientBadge({
+        subject: 'Coverage',
+        status: String(overAllCoverageVal['line_percent'].toFixed(2)),
+        style: 'flat', 
+        gradient: ['00f2ff', '3cfa3f'],
+    });
+
+    if (badgePath?.length) {
+        console.log(`Write Svg to file ${badgePath}...`)
+        fs.writeFileSync(badgePath, svgString)
+        console.log('Badge saved succesfully.')
+    }
+    core.info(svgString)
+
+
+    await checkCoverageThreshold(overAllCoverageVal, threshold)
 }       
 
 const checkCoverageThreshold = async(overAllCoverage, threshold) => {
@@ -27,7 +55,7 @@ const checkCoverageThreshold = async(overAllCoverage, threshold) => {
     return true
 }
 
-const markdownTable = async(prNumber, moduleCoverage, overAllCoverage, threshold) => {
+const markdownTable = async(moduleCoverage, overAllCoverage, threshold) => {
     const header = [
         'Category',
         'Percentage',
@@ -57,13 +85,8 @@ const markdownTable = async(prNumber, moduleCoverage, overAllCoverage, threshold
     }
     const bodyText = [headerText, failedText, tableText].filter(Boolean).join("\n");
 
-    await replaceComment.default({
-        token: core.getInput('token', { required: true }),
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
-        issue_number: prNumber,
-        body: bodyText
-    })
+    return bodyText;
+
 }
 
 const overallCoverage = async(result) => {
