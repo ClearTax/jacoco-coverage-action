@@ -16,6 +16,9 @@ inputs:
   token:
     description: "Github PAT to create PR comments"
     required: true
+  badgePath:
+    description: "Path where badge will be generated"
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
