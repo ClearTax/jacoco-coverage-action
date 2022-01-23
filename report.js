@@ -36,7 +36,10 @@ const report = async(files, threshold,badgePath) => {
     if (badgePath?.length) {
         console.log(`Write Svg to file ${badgePath}...`)
         fs.writeFileSync(badgePath, svgString)
-        console.log('Badge saved succesfully.')
+        core.info('Badge saved succesfully.')
+    }
+    else{
+        core.info('Badge path not available')
     }
     core.info(svgString)
 
