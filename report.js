@@ -33,7 +33,7 @@ const report = async(files, threshold,badgePath) => {
         gradient: ['00f2ff', '3cfa3f'],
     });
 
-    if (badgePath?.length) {
+    if (badgePath && badgePath.length>0) {
         core.info(`Write Svg to file ${badgePath}...`)
         fs.writeFileSync(badgePath, svgString)
         core.info('Badge saved succesfully.')
