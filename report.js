@@ -38,6 +38,9 @@ const report = async(files, threshold,badgePath) => {
         fs.writeFileSync(badgePath, svgString)
         core.info('Badge saved succesfully.')
     }
+    else{
+        core.info('Badge path not configured')
+    }
     core.info(svgString)
 
 
