@@ -10462,8 +10462,8 @@ const report = async(files, threshold,badgePath) => {
 }       
 
 const checkCoverageThreshold = async(overAllCoverage, threshold) => {
-    const percentage = parseFloat(overAllCoverage['line_percent']).toFixed(2)
-    threshold = parseFloat(threshold).toFixed(2)
+    const percentage = parseFloat(overAllCoverage['line_percent'])
+    threshold = parseFloat(threshold)
     if (percentage < threshold) {
         core.setFailed(`Coverage of ${percentage} is below passing threshold of ${threshold}`)
         return false
