@@ -11,7 +11,8 @@ async function run () {
     const badgePath = core.getInput("badgePath");
     await report(reportPaths, minCoverage,badgePath)
   } catch (error) {
-    core.setFailed(error.message)
+    console.error(error);
+    core.setFailed(error)
   }
 }
 
