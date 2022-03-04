@@ -18,6 +18,9 @@ const report = async(files, threshold,badgePath) => {
     if (issue_number) {
         let bodyText = await markdownTable(moduleCoverage, overAllCoverageVal, threshold)
         core.info(bodyText)
+        core.info(issue_number)
+        core.info(github.context.repo.repo)
+        core.info(github.context.repo.owner)
         await replaceComment.default({
             token: core.getInput('token', { required: true }),
             owner: github.context.repo.owner,
