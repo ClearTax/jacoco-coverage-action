@@ -22,7 +22,7 @@
   "license": "MIT",
   "homepage": "https://github.com/prajithp13/jacoco-parser",
   "dependencies": {
-    "@actions/core": "^1.2.5",
+    "@actions/core": "^1.9.1",
     "@actions/github": "^4.0.0",
     "@aki77/actions-replace-comment": "^0.5.2",
     "csv-parser": "^3.0.0",
