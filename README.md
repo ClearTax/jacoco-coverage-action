@@ -33,3 +33,11 @@ jobs:
 | paths | true  | comma separated paths of the generated jacoco csv files. | null |
 | min-coverage | false | The minimum coverage required to pass the PR | 90 |
 | token | true | Github personal acess token to add comments to Pull Request | null
+### Outputs
+
+| Name | Description |
+|---|---|
+| `total-coverage` | The overall coverage percentage. |
+| `lines-covered` | The total number of lines covered by tests. |
+| `lines-missed` | The total number of lines missed by tests. |
+| `total-lines` | The total number of lines in the project. |

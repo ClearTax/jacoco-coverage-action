@@ -12,6 +12,7 @@ const csv = require('csv-parser')
 const report = async(files, threshold,badgePath) => {
     const moduleCoverage  = await filterReport(files)
     const overAllCoverageVal = await overallCoverage(moduleCoverage)
+    setOutputVariables(overAllCoverageVal);
     
     const issue_number = github.context.issue.number
 
@@ -160,4 +161,11 @@ const parseFile = async(file) => {
     return await promise
 }
 
-module.exports = report
+const setOutputVariables = overAllCoverageVal => {
+    core.setOutput('total-coverage', overAllCoverageVal.line_percent.toFixed(2));
+    core.setOutput('lines-covered', overAllCoverageVal.line_covered);
+    core.setOutput('lines-missed', overAllCoverageVal.line_missed);
+    core.setOutput('total-lines', overAllCoverageVal.line_total);
+}
+
+module.exports = report;
