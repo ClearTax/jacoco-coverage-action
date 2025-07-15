@@ -1686,7 +1686,7 @@ function _objectWithoutProperties(source, excluded) {
   return target;
 }
 
-const VERSION = "3.5.1";
+const VERSION = "3.6.0";
 
 const _excluded = ["authStrategy"];
 class Octokit {
@@ -2352,21 +2352,16 @@ exports.withCustomRequest = withCustomRequest;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 
-const VERSION = "2.17.0";
+const VERSION = "2.21.3";
 
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
 
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
-
-    if (enumerableOnly) {
-      symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-    }
-
-    keys.push.apply(keys, symbols);
+    enumerableOnly && (symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
   }
 
   return keys;
@@ -2374,19 +2369,12 @@ function ownKeys(object, enumerableOnly) {
 
 function _objectSpread2(target) {
   for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
+    var source = null != arguments[i] ? arguments[i] : {};
+    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
   }
 
   return target;
@@ -2536,7 +2524,7 @@ const composePaginateRest = Object.assign(paginate, {
   iterator
 });
 
-const paginatingEndpoints = ["GET /app/hook/deliveries", "GET /app/installations", "GET /applications/grants", "GET /authorizations", "GET /enterprises/{enterprise}/actions/permissions/organizations", "GET /enterprises/{enterprise}/actions/runner-groups", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners", "GET /enterprises/{enterprise}/actions/runners", "GET /enterprises/{enterprise}/actions/runners/downloads", "GET /events", "GET /gists", "GET /gists/public", "GET /gists/starred", "GET /gists/{gist_id}/comments", "GET /gists/{gist_id}/commits", "GET /gists/{gist_id}/forks", "GET /installation/repositories", "GET /issues", "GET /marketplace_listing/plans", "GET /marketplace_listing/plans/{plan_id}/accounts", "GET /marketplace_listing/stubbed/plans", "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts", "GET /networks/{owner}/{repo}/events", "GET /notifications", "GET /organizations", "GET /orgs/{org}/actions/permissions/repositories", "GET /orgs/{org}/actions/runner-groups", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners", "GET /orgs/{org}/actions/runners", "GET /orgs/{org}/actions/runners/downloads", "GET /orgs/{org}/actions/secrets", "GET /orgs/{org}/actions/secrets/{secret_name}/repositories", "GET /orgs/{org}/blocks", "GET /orgs/{org}/credential-authorizations", "GET /orgs/{org}/events", "GET /orgs/{org}/failed_invitations", "GET /orgs/{org}/hooks", "GET /orgs/{org}/hooks/{hook_id}/deliveries", "GET /orgs/{org}/installations", "GET /orgs/{org}/invitations", "GET /orgs/{org}/invitations/{invitation_id}/teams", "GET /orgs/{org}/issues", "GET /orgs/{org}/members", "GET /orgs/{org}/migrations", "GET /orgs/{org}/migrations/{migration_id}/repositories", "GET /orgs/{org}/outside_collaborators", "GET /orgs/{org}/packages", "GET /orgs/{org}/projects", "GET /orgs/{org}/public_members", "GET /orgs/{org}/repos", "GET /orgs/{org}/secret-scanning/alerts", "GET /orgs/{org}/team-sync/groups", "GET /orgs/{org}/teams", "GET /orgs/{org}/teams/{team_slug}/discussions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/invitations", "GET /orgs/{org}/teams/{team_slug}/members", "GET /orgs/{org}/teams/{team_slug}/projects", "GET /orgs/{org}/teams/{team_slug}/repos", "GET /orgs/{org}/teams/{team_slug}/team-sync/group-mappings", "GET /orgs/{org}/teams/{team_slug}/teams", "GET /projects/columns/{column_id}/cards", "GET /projects/{project_id}/collaborators", "GET /projects/{project_id}/columns", "GET /repos/{owner}/{repo}/actions/artifacts", "GET /repos/{owner}/{repo}/actions/runners", "GET /repos/{owner}/{repo}/actions/runners/downloads", "GET /repos/{owner}/{repo}/actions/runs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs", "GET /repos/{owner}/{repo}/actions/secrets", "GET /repos/{owner}/{repo}/actions/workflows", "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs", "GET /repos/{owner}/{repo}/assignees", "GET /repos/{owner}/{repo}/autolinks", "GET /repos/{owner}/{repo}/branches", "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", "GET /repos/{owner}/{repo}/code-scanning/alerts", "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", "GET /repos/{owner}/{repo}/code-scanning/analyses", "GET /repos/{owner}/{repo}/collaborators", "GET /repos/{owner}/{repo}/comments", "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/commits", "GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head", "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments", "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", "GET /repos/{owner}/{repo}/commits/{ref}/check-runs", "GET /repos/{owner}/{repo}/commits/{ref}/check-suites", "GET /repos/{owner}/{repo}/commits/{ref}/statuses", "GET /repos/{owner}/{repo}/contributors", "GET /repos/{owner}/{repo}/deployments", "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses", "GET /repos/{owner}/{repo}/events", "GET /repos/{owner}/{repo}/forks", "GET /repos/{owner}/{repo}/git/matching-refs/{ref}", "GET /repos/{owner}/{repo}/hooks", "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries", "GET /repos/{owner}/{repo}/invitations", "GET /repos/{owner}/{repo}/issues", "GET /repos/{owner}/{repo}/issues/comments", "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/issues/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/comments", "GET /repos/{owner}/{repo}/issues/{issue_number}/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/labels", "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", "GET /repos/{owner}/{repo}/keys", "GET /repos/{owner}/{repo}/labels", "GET /repos/{owner}/{repo}/milestones", "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels", "GET /repos/{owner}/{repo}/notifications", "GET /repos/{owner}/{repo}/pages/builds", "GET /repos/{owner}/{repo}/projects", "GET /repos/{owner}/{repo}/pulls", "GET /repos/{owner}/{repo}/pulls/comments", "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments", "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", "GET /repos/{owner}/{repo}/pulls/{pull_number}/files", "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments", "GET /repos/{owner}/{repo}/releases", "GET /repos/{owner}/{repo}/releases/{release_id}/assets", "GET /repos/{owner}/{repo}/secret-scanning/alerts", "GET /repos/{owner}/{repo}/stargazers", "GET /repos/{owner}/{repo}/subscribers", "GET /repos/{owner}/{repo}/tags", "GET /repos/{owner}/{repo}/teams", "GET /repositories", "GET /repositories/{repository_id}/environments/{environment_name}/secrets", "GET /scim/v2/enterprises/{enterprise}/Groups", "GET /scim/v2/enterprises/{enterprise}/Users", "GET /scim/v2/organizations/{org}/Users", "GET /search/code", "GET /search/commits", "GET /search/issues", "GET /search/labels", "GET /search/repositories", "GET /search/topics", "GET /search/users", "GET /teams/{team_id}/discussions", "GET /teams/{team_id}/discussions/{discussion_number}/comments", "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /teams/{team_id}/discussions/{discussion_number}/reactions", "GET /teams/{team_id}/invitations", "GET /teams/{team_id}/members", "GET /teams/{team_id}/projects", "GET /teams/{team_id}/repos", "GET /teams/{team_id}/team-sync/group-mappings", "GET /teams/{team_id}/teams", "GET /user/blocks", "GET /user/emails", "GET /user/followers", "GET /user/following", "GET /user/gpg_keys", "GET /user/installations", "GET /user/installations/{installation_id}/repositories", "GET /user/issues", "GET /user/keys", "GET /user/marketplace_purchases", "GET /user/marketplace_purchases/stubbed", "GET /user/memberships/orgs", "GET /user/migrations", "GET /user/migrations/{migration_id}/repositories", "GET /user/orgs", "GET /user/packages", "GET /user/public_emails", "GET /user/repos", "GET /user/repository_invitations", "GET /user/starred", "GET /user/subscriptions", "GET /user/teams", "GET /users", "GET /users/{username}/events", "GET /users/{username}/events/orgs/{org}", "GET /users/{username}/events/public", "GET /users/{username}/followers", "GET /users/{username}/following", "GET /users/{username}/gists", "GET /users/{username}/gpg_keys", "GET /users/{username}/keys", "GET /users/{username}/orgs", "GET /users/{username}/packages", "GET /users/{username}/projects", "GET /users/{username}/received_events", "GET /users/{username}/received_events/public", "GET /users/{username}/repos", "GET /users/{username}/starred", "GET /users/{username}/subscriptions"];
+const paginatingEndpoints = ["GET /app/hook/deliveries", "GET /app/installations", "GET /applications/grants", "GET /authorizations", "GET /enterprises/{enterprise}/actions/permissions/organizations", "GET /enterprises/{enterprise}/actions/runner-groups", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners", "GET /enterprises/{enterprise}/actions/runners", "GET /enterprises/{enterprise}/audit-log", "GET /enterprises/{enterprise}/secret-scanning/alerts", "GET /enterprises/{enterprise}/settings/billing/advanced-security", "GET /events", "GET /gists", "GET /gists/public", "GET /gists/starred", "GET /gists/{gist_id}/comments", "GET /gists/{gist_id}/commits", "GET /gists/{gist_id}/forks", "GET /installation/repositories", "GET /issues", "GET /licenses", "GET /marketplace_listing/plans", "GET /marketplace_listing/plans/{plan_id}/accounts", "GET /marketplace_listing/stubbed/plans", "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts", "GET /networks/{owner}/{repo}/events", "GET /notifications", "GET /organizations", "GET /orgs/{org}/actions/cache/usage-by-repository", "GET /orgs/{org}/actions/permissions/repositories", "GET /orgs/{org}/actions/runner-groups", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners", "GET /orgs/{org}/actions/runners", "GET /orgs/{org}/actions/secrets", "GET /orgs/{org}/actions/secrets/{secret_name}/repositories", "GET /orgs/{org}/audit-log", "GET /orgs/{org}/blocks", "GET /orgs/{org}/code-scanning/alerts", "GET /orgs/{org}/codespaces", "GET /orgs/{org}/credential-authorizations", "GET /orgs/{org}/dependabot/secrets", "GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories", "GET /orgs/{org}/events", "GET /orgs/{org}/external-groups", "GET /orgs/{org}/failed_invitations", "GET /orgs/{org}/hooks", "GET /orgs/{org}/hooks/{hook_id}/deliveries", "GET /orgs/{org}/installations", "GET /orgs/{org}/invitations", "GET /orgs/{org}/invitations/{invitation_id}/teams", "GET /orgs/{org}/issues", "GET /orgs/{org}/members", "GET /orgs/{org}/migrations", "GET /orgs/{org}/migrations/{migration_id}/repositories", "GET /orgs/{org}/outside_collaborators", "GET /orgs/{org}/packages", "GET /orgs/{org}/packages/{package_type}/{package_name}/versions", "GET /orgs/{org}/projects", "GET /orgs/{org}/public_members", "GET /orgs/{org}/repos", "GET /orgs/{org}/secret-scanning/alerts", "GET /orgs/{org}/settings/billing/advanced-security", "GET /orgs/{org}/team-sync/groups", "GET /orgs/{org}/teams", "GET /orgs/{org}/teams/{team_slug}/discussions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/invitations", "GET /orgs/{org}/teams/{team_slug}/members", "GET /orgs/{org}/teams/{team_slug}/projects", "GET /orgs/{org}/teams/{team_slug}/repos", "GET /orgs/{org}/teams/{team_slug}/teams", "GET /projects/columns/{column_id}/cards", "GET /projects/{project_id}/collaborators", "GET /projects/{project_id}/columns", "GET /repos/{owner}/{repo}/actions/artifacts", "GET /repos/{owner}/{repo}/actions/caches", "GET /repos/{owner}/{repo}/actions/runners", "GET /repos/{owner}/{repo}/actions/runs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs", "GET /repos/{owner}/{repo}/actions/secrets", "GET /repos/{owner}/{repo}/actions/workflows", "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs", "GET /repos/{owner}/{repo}/assignees", "GET /repos/{owner}/{repo}/branches", "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", "GET /repos/{owner}/{repo}/code-scanning/alerts", "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", "GET /repos/{owner}/{repo}/code-scanning/analyses", "GET /repos/{owner}/{repo}/codespaces", "GET /repos/{owner}/{repo}/codespaces/devcontainers", "GET /repos/{owner}/{repo}/codespaces/secrets", "GET /repos/{owner}/{repo}/collaborators", "GET /repos/{owner}/{repo}/comments", "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/commits", "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments", "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", "GET /repos/{owner}/{repo}/commits/{ref}/check-runs", "GET /repos/{owner}/{repo}/commits/{ref}/check-suites", "GET /repos/{owner}/{repo}/commits/{ref}/status", "GET /repos/{owner}/{repo}/commits/{ref}/statuses", "GET /repos/{owner}/{repo}/contributors", "GET /repos/{owner}/{repo}/dependabot/secrets", "GET /repos/{owner}/{repo}/deployments", "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses", "GET /repos/{owner}/{repo}/environments", "GET /repos/{owner}/{repo}/events", "GET /repos/{owner}/{repo}/forks", "GET /repos/{owner}/{repo}/git/matching-refs/{ref}", "GET /repos/{owner}/{repo}/hooks", "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries", "GET /repos/{owner}/{repo}/invitations", "GET /repos/{owner}/{repo}/issues", "GET /repos/{owner}/{repo}/issues/comments", "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/issues/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/comments", "GET /repos/{owner}/{repo}/issues/{issue_number}/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/labels", "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", "GET /repos/{owner}/{repo}/keys", "GET /repos/{owner}/{repo}/labels", "GET /repos/{owner}/{repo}/milestones", "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels", "GET /repos/{owner}/{repo}/notifications", "GET /repos/{owner}/{repo}/pages/builds", "GET /repos/{owner}/{repo}/projects", "GET /repos/{owner}/{repo}/pulls", "GET /repos/{owner}/{repo}/pulls/comments", "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments", "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", "GET /repos/{owner}/{repo}/pulls/{pull_number}/files", "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments", "GET /repos/{owner}/{repo}/releases", "GET /repos/{owner}/{repo}/releases/{release_id}/assets", "GET /repos/{owner}/{repo}/releases/{release_id}/reactions", "GET /repos/{owner}/{repo}/secret-scanning/alerts", "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations", "GET /repos/{owner}/{repo}/stargazers", "GET /repos/{owner}/{repo}/subscribers", "GET /repos/{owner}/{repo}/tags", "GET /repos/{owner}/{repo}/teams", "GET /repos/{owner}/{repo}/topics", "GET /repositories", "GET /repositories/{repository_id}/environments/{environment_name}/secrets", "GET /search/code", "GET /search/commits", "GET /search/issues", "GET /search/labels", "GET /search/repositories", "GET /search/topics", "GET /search/users", "GET /teams/{team_id}/discussions", "GET /teams/{team_id}/discussions/{discussion_number}/comments", "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /teams/{team_id}/discussions/{discussion_number}/reactions", "GET /teams/{team_id}/invitations", "GET /teams/{team_id}/members", "GET /teams/{team_id}/projects", "GET /teams/{team_id}/repos", "GET /teams/{team_id}/teams", "GET /user/blocks", "GET /user/codespaces", "GET /user/codespaces/secrets", "GET /user/emails", "GET /user/followers", "GET /user/following", "GET /user/gpg_keys", "GET /user/installations", "GET /user/installations/{installation_id}/repositories", "GET /user/issues", "GET /user/keys", "GET /user/marketplace_purchases", "GET /user/marketplace_purchases/stubbed", "GET /user/memberships/orgs", "GET /user/migrations", "GET /user/migrations/{migration_id}/repositories", "GET /user/orgs", "GET /user/packages", "GET /user/packages/{package_type}/{package_name}/versions", "GET /user/public_emails", "GET /user/repos", "GET /user/repository_invitations", "GET /user/starred", "GET /user/subscriptions", "GET /user/teams", "GET /users", "GET /users/{username}/events", "GET /users/{username}/events/orgs/{org}", "GET /users/{username}/events/public", "GET /users/{username}/followers", "GET /users/{username}/following", "GET /users/{username}/gists", "GET /users/{username}/gpg_keys", "GET /users/{username}/keys", "GET /users/{username}/orgs", "GET /users/{username}/packages", "GET /users/{username}/projects", "GET /users/{username}/received_events", "GET /users/{username}/received_events/public", "GET /users/{username}/repos", "GET /users/{username}/starred", "GET /users/{username}/subscriptions"];
 
 function isPaginatingEndpoint(arg) {
   if (typeof arg === "string") {
@@ -3942,7 +3930,7 @@ var isPlainObject = __nccwpck_require__(3287);
 var nodeFetch = _interopDefault(__nccwpck_require__(467));
 var requestError = __nccwpck_require__(537);
 
-const VERSION = "5.6.2";
+const VERSION = "5.6.3";
 
 function getBufferResponse(response) {
   return response.arrayBuffer();
@@ -4199,6 +4187,8 @@ function _defineProperty(obj, key, value) {
 
 const Endpoints = {
   actions: {
+    addCustomLabelsToSelfHostedRunnerForOrg: ["POST /orgs/{org}/actions/runners/{runner_id}/labels"],
+    addCustomLabelsToSelfHostedRunnerForRepo: ["POST /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"],
     addSelectedRepoToOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
     approveWorkflowRun: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve"],
     cancelWorkflowRun: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel"],
@@ -4210,6 +4200,8 @@ const Endpoints = {
     createRemoveTokenForOrg: ["POST /orgs/{org}/actions/runners/remove-token"],
     createRemoveTokenForRepo: ["POST /repos/{owner}/{repo}/actions/runners/remove-token"],
     createWorkflowDispatch: ["POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches"],
+    deleteActionsCacheById: ["DELETE /repos/{owner}/{repo}/actions/caches/{cache_id}"],
+    deleteActionsCacheByKey: ["DELETE /repos/{owner}/{repo}/actions/caches{?key,ref}"],
     deleteArtifact: ["DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
     deleteEnvironmentSecret: ["DELETE /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}"],
     deleteOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}"],
@@ -4226,11 +4218,19 @@ const Endpoints = {
     downloadWorkflowRunLogs: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
     enableSelectedRepositoryGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories/{repository_id}"],
     enableWorkflow: ["PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"],
+    getActionsCacheList: ["GET /repos/{owner}/{repo}/actions/caches"],
+    getActionsCacheUsage: ["GET /repos/{owner}/{repo}/actions/cache/usage"],
+    getActionsCacheUsageByRepoForOrg: ["GET /orgs/{org}/actions/cache/usage-by-repository"],
+    getActionsCacheUsageForEnterprise: ["GET /enterprises/{enterprise}/actions/cache/usage"],
+    getActionsCacheUsageForOrg: ["GET /orgs/{org}/actions/cache/usage"],
     getAllowedActionsOrganization: ["GET /orgs/{org}/actions/permissions/selected-actions"],
     getAllowedActionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions/selected-actions"],
     getArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
     getEnvironmentPublicKey: ["GET /repositories/{repository_id}/environments/{environment_name}/secrets/public-key"],
     getEnvironmentSecret: ["GET /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}"],
+    getGithubActionsDefaultWorkflowPermissionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/workflow"],
+    getGithubActionsDefaultWorkflowPermissionsOrganization: ["GET /orgs/{org}/actions/permissions/workflow"],
+    getGithubActionsDefaultWorkflowPermissionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions/workflow"],
     getGithubActionsPermissionsOrganization: ["GET /orgs/{org}/actions/permissions"],
     getGithubActionsPermissionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions"],
     getJobForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}"],
@@ -4246,6 +4246,7 @@ const Endpoints = {
     getSelfHostedRunnerForOrg: ["GET /orgs/{org}/actions/runners/{runner_id}"],
     getSelfHostedRunnerForRepo: ["GET /repos/{owner}/{repo}/actions/runners/{runner_id}"],
     getWorkflow: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}"],
+    getWorkflowAccessToRepository: ["GET /repos/{owner}/{repo}/actions/permissions/access"],
     getWorkflowRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}"],
     getWorkflowRunAttempt: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}"],
     getWorkflowRunUsage: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing"],
@@ -4254,6 +4255,8 @@ const Endpoints = {
     listEnvironmentSecrets: ["GET /repositories/{repository_id}/environments/{environment_name}/secrets"],
     listJobsForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs"],
     listJobsForWorkflowRunAttempt: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs"],
+    listLabelsForSelfHostedRunnerForOrg: ["GET /orgs/{org}/actions/runners/{runner_id}/labels"],
+    listLabelsForSelfHostedRunnerForRepo: ["GET /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"],
     listOrgSecrets: ["GET /orgs/{org}/actions/secrets"],
     listRepoSecrets: ["GET /repos/{owner}/{repo}/actions/secrets"],
     listRepoWorkflows: ["GET /repos/{owner}/{repo}/actions/workflows"],
@@ -4266,14 +4269,27 @@ const Endpoints = {
     listWorkflowRunArtifacts: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts"],
     listWorkflowRuns: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs"],
     listWorkflowRunsForRepo: ["GET /repos/{owner}/{repo}/actions/runs"],
+    reRunJobForWorkflowRun: ["POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun"],
+    reRunWorkflow: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun"],
+    reRunWorkflowFailedJobs: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs"],
+    removeAllCustomLabelsFromSelfHostedRunnerForOrg: ["DELETE /orgs/{org}/actions/runners/{runner_id}/labels"],
+    removeAllCustomLabelsFromSelfHostedRunnerForRepo: ["DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"],
+    removeCustomLabelFromSelfHostedRunnerForOrg: ["DELETE /orgs/{org}/actions/runners/{runner_id}/labels/{name}"],
+    removeCustomLabelFromSelfHostedRunnerForRepo: ["DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}"],
     removeSelectedRepoFromOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
     reviewPendingDeploymentsForRun: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"],
     setAllowedActionsOrganization: ["PUT /orgs/{org}/actions/permissions/selected-actions"],
     setAllowedActionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/selected-actions"],
+    setCustomLabelsForSelfHostedRunnerForOrg: ["PUT /orgs/{org}/actions/runners/{runner_id}/labels"],
+    setCustomLabelsForSelfHostedRunnerForRepo: ["PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"],
+    setGithubActionsDefaultWorkflowPermissionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/workflow"],
+    setGithubActionsDefaultWorkflowPermissionsOrganization: ["PUT /orgs/{org}/actions/permissions/workflow"],
+    setGithubActionsDefaultWorkflowPermissionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/workflow"],
     setGithubActionsPermissionsOrganization: ["PUT /orgs/{org}/actions/permissions"],
     setGithubActionsPermissionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions"],
     setSelectedReposForOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories"],
-    setSelectedRepositoriesEnabledGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories"]
+    setSelectedRepositoriesEnabledGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories"],
+    setWorkflowAccessToRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/access"]
   },
   activity: {
     checkRepoIsStarredByAuthenticatedUser: ["GET /user/starred/{owner}/{repo}"],
@@ -4314,16 +4330,6 @@ const Endpoints = {
     }],
     addRepoToInstallationForAuthenticatedUser: ["PUT /user/installations/{installation_id}/repositories/{repository_id}"],
     checkToken: ["POST /applications/{client_id}/token"],
-    createContentAttachment: ["POST /content_references/{content_reference_id}/attachments", {
-      mediaType: {
-        previews: ["corsair"]
-      }
-    }],
-    createContentAttachmentForRepo: ["POST /repos/{owner}/{repo}/content_references/{content_reference_id}/attachments", {
-      mediaType: {
-        previews: ["corsair"]
-      }
-    }],
     createFromManifest: ["POST /app-manifests/{code}/conversions"],
     createInstallationAccessToken: ["POST /app/installations/{installation_id}/access_tokens"],
     deleteAuthorization: ["DELETE /applications/{client_id}/grant"],
@@ -4365,6 +4371,8 @@ const Endpoints = {
   billing: {
     getGithubActionsBillingOrg: ["GET /orgs/{org}/settings/billing/actions"],
     getGithubActionsBillingUser: ["GET /users/{username}/settings/billing/actions"],
+    getGithubAdvancedSecurityBillingGhe: ["GET /enterprises/{enterprise}/settings/billing/advanced-security"],
+    getGithubAdvancedSecurityBillingOrg: ["GET /orgs/{org}/settings/billing/advanced-security"],
     getGithubPackagesBillingOrg: ["GET /orgs/{org}/settings/billing/packages"],
     getGithubPackagesBillingUser: ["GET /users/{username}/settings/billing/packages"],
     getSharedStorageBillingOrg: ["GET /orgs/{org}/settings/billing/shared-storage"],
@@ -4394,6 +4402,7 @@ const Endpoints = {
     getAnalysis: ["GET /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"],
     getSarif: ["GET /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}"],
     listAlertInstances: ["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances"],
+    listAlertsForOrg: ["GET /orgs/{org}/code-scanning/alerts"],
     listAlertsForRepo: ["GET /repos/{owner}/{repo}/code-scanning/alerts"],
     listAlertsInstances: ["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", {}, {
       renamed: ["codeScanning", "listAlertInstances"]
@@ -4406,16 +4415,80 @@ const Endpoints = {
     getAllCodesOfConduct: ["GET /codes_of_conduct"],
     getConductCode: ["GET /codes_of_conduct/{key}"]
   },
+  codespaces: {
+    addRepositoryForSecretForAuthenticatedUser: ["PUT /user/codespaces/secrets/{secret_name}/repositories/{repository_id}"],
+    codespaceMachinesForAuthenticatedUser: ["GET /user/codespaces/{codespace_name}/machines"],
+    createForAuthenticatedUser: ["POST /user/codespaces"],
+    createOrUpdateRepoSecret: ["PUT /repos/{owner}/{repo}/codespaces/secrets/{secret_name}"],
+    createOrUpdateSecretForAuthenticatedUser: ["PUT /user/codespaces/secrets/{secret_name}"],
+    createWithPrForAuthenticatedUser: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/codespaces"],
+    createWithRepoForAuthenticatedUser: ["POST /repos/{owner}/{repo}/codespaces"],
+    deleteForAuthenticatedUser: ["DELETE /user/codespaces/{codespace_name}"],
+    deleteFromOrganization: ["DELETE /orgs/{org}/members/{username}/codespaces/{codespace_name}"],
+    deleteRepoSecret: ["DELETE /repos/{owner}/{repo}/codespaces/secrets/{secret_name}"],
+    deleteSecretForAuthenticatedUser: ["DELETE /user/codespaces/secrets/{secret_name}"],
+    exportForAuthenticatedUser: ["POST /user/codespaces/{codespace_name}/exports"],
+    getExportDetailsForAuthenticatedUser: ["GET /user/codespaces/{codespace_name}/exports/{export_id}"],
+    getForAuthenticatedUser: ["GET /user/codespaces/{codespace_name}"],
+    getPublicKeyForAuthenticatedUser: ["GET /user/codespaces/secrets/public-key"],
+    getRepoPublicKey: ["GET /repos/{owner}/{repo}/codespaces/secrets/public-key"],
+    getRepoSecret: ["GET /repos/{owner}/{repo}/codespaces/secrets/{secret_name}"],
+    getSecretForAuthenticatedUser: ["GET /user/codespaces/secrets/{secret_name}"],
+    listDevcontainersInRepositoryForAuthenticatedUser: ["GET /repos/{owner}/{repo}/codespaces/devcontainers"],
+    listForAuthenticatedUser: ["GET /user/codespaces"],
+    listInOrganization: ["GET /orgs/{org}/codespaces", {}, {
+      renamedParameters: {
+        org_id: "org"
+      }
+    }],
+    listInRepositoryForAuthenticatedUser: ["GET /repos/{owner}/{repo}/codespaces"],
+    listRepoSecrets: ["GET /repos/{owner}/{repo}/codespaces/secrets"],
+    listRepositoriesForSecretForAuthenticatedUser: ["GET /user/codespaces/secrets/{secret_name}/repositories"],
+    listSecretsForAuthenticatedUser: ["GET /user/codespaces/secrets"],
+    removeRepositoryForSecretForAuthenticatedUser: ["DELETE /user/codespaces/secrets/{secret_name}/repositories/{repository_id}"],
+    repoMachinesForAuthenticatedUser: ["GET /repos/{owner}/{repo}/codespaces/machines"],
+    setRepositoriesForSecretForAuthenticatedUser: ["PUT /user/codespaces/secrets/{secret_name}/repositories"],
+    startForAuthenticatedUser: ["POST /user/codespaces/{codespace_name}/start"],
+    stopForAuthenticatedUser: ["POST /user/codespaces/{codespace_name}/stop"],
+    stopInOrganization: ["POST /orgs/{org}/members/{username}/codespaces/{codespace_name}/stop"],
+    updateForAuthenticatedUser: ["PATCH /user/codespaces/{codespace_name}"]
+  },
+  dependabot: {
+    addSelectedRepoToOrgSecret: ["PUT /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}"],
+    createOrUpdateOrgSecret: ["PUT /orgs/{org}/dependabot/secrets/{secret_name}"],
+    createOrUpdateRepoSecret: ["PUT /repos/{owner}/{repo}/dependabot/secrets/{secret_name}"],
+    deleteOrgSecret: ["DELETE /orgs/{org}/dependabot/secrets/{secret_name}"],
+    deleteRepoSecret: ["DELETE /repos/{owner}/{repo}/dependabot/secrets/{secret_name}"],
+    getOrgPublicKey: ["GET /orgs/{org}/dependabot/secrets/public-key"],
+    getOrgSecret: ["GET /orgs/{org}/dependabot/secrets/{secret_name}"],
+    getRepoPublicKey: ["GET /repos/{owner}/{repo}/dependabot/secrets/public-key"],
+    getRepoSecret: ["GET /repos/{owner}/{repo}/dependabot/secrets/{secret_name}"],
+    listOrgSecrets: ["GET /orgs/{org}/dependabot/secrets"],
+    listRepoSecrets: ["GET /repos/{owner}/{repo}/dependabot/secrets"],
+    listSelectedReposForOrgSecret: ["GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories"],
+    removeSelectedRepoFromOrgSecret: ["DELETE /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}"],
+    setSelectedReposForOrgSecret: ["PUT /orgs/{org}/dependabot/secrets/{secret_name}/repositories"]
+  },
+  dependencyGraph: {
+    createRepositorySnapshot: ["POST /repos/{owner}/{repo}/dependency-graph/snapshots"],
+    diffRange: ["GET /repos/{owner}/{repo}/dependency-graph/compare/{basehead}"]
+  },
   emojis: {
     get: ["GET /emojis"]
   },
   enterpriseAdmin: {
+    addCustomLabelsToSelfHostedRunnerForEnterprise: ["POST /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
     disableSelectedOrganizationGithubActionsEnterprise: ["DELETE /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
     enableSelectedOrganizationGithubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
     getAllowedActionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/selected-actions"],
     getGithubActionsPermissionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions"],
+    getServerStatistics: ["GET /enterprise-installation/{enterprise_or_org}/server-statistics"],
+    listLabelsForSelfHostedRunnerForEnterprise: ["GET /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
     listSelectedOrganizationsEnabledGithubActionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/organizations"],
+    removeAllCustomLabelsFromSelfHostedRunnerForEnterprise: ["DELETE /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
+    removeCustomLabelFromSelfHostedRunnerForEnterprise: ["DELETE /enterprises/{enterprise}/actions/runners/{runner_id}/labels/{name}"],
     setAllowedActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/selected-actions"],
+    setCustomLabelsForSelfHostedRunnerForEnterprise: ["PUT /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
     setGithubActionsPermissionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions"],
     setSelectedOrganizationsEnabledGithubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations"]
   },
@@ -4586,6 +4659,7 @@ const Endpoints = {
     list: ["GET /organizations"],
     listAppInstallations: ["GET /orgs/{org}/installations"],
     listBlockedUsers: ["GET /orgs/{org}/blocks"],
+    listCustomRoles: ["GET /organizations/{organization_id}/custom_roles"],
     listFailedInvitations: ["GET /orgs/{org}/failed_invitations"],
     listForAuthenticatedUser: ["GET /user/orgs"],
     listForUser: ["GET /users/{username}/orgs"],
@@ -4714,12 +4788,14 @@ const Endpoints = {
     deleteForIssue: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}"],
     deleteForIssueComment: ["DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}"],
     deleteForPullRequestComment: ["DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}"],
+    deleteForRelease: ["DELETE /repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}"],
     deleteForTeamDiscussion: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}"],
     deleteForTeamDiscussionComment: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}"],
     listForCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}/reactions"],
     listForIssue: ["GET /repos/{owner}/{repo}/issues/{issue_number}/reactions"],
     listForIssueComment: ["GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"],
     listForPullRequestReviewComment: ["GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"],
+    listForRelease: ["GET /repos/{owner}/{repo}/releases/{release_id}/reactions"],
     listForTeamDiscussionCommentInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions"],
     listForTeamDiscussionInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions"]
   },
@@ -4743,6 +4819,7 @@ const Endpoints = {
     }],
     checkCollaborator: ["GET /repos/{owner}/{repo}/collaborators/{username}"],
     checkVulnerabilityAlerts: ["GET /repos/{owner}/{repo}/vulnerability-alerts"],
+    codeownersErrors: ["GET /repos/{owner}/{repo}/codeowners/errors"],
     compareCommits: ["GET /repos/{owner}/{repo}/compare/{base}...{head}"],
     compareCommitsWithBasehead: ["GET /repos/{owner}/{repo}/compare/{basehead}"],
     createAutolink: ["POST /repos/{owner}/{repo}/autolinks"],
@@ -4760,6 +4837,7 @@ const Endpoints = {
     createOrUpdateFileContents: ["PUT /repos/{owner}/{repo}/contents/{path}"],
     createPagesSite: ["POST /repos/{owner}/{repo}/pages"],
     createRelease: ["POST /repos/{owner}/{repo}/releases"],
+    createTagProtection: ["POST /repos/{owner}/{repo}/tags/protection"],
     createUsingTemplate: ["POST /repos/{template_owner}/{template_repo}/generate"],
     createWebhook: ["POST /repos/{owner}/{repo}/hooks"],
     declineInvitation: ["DELETE /user/repository_invitations/{invitation_id}", {}, {
@@ -4782,6 +4860,7 @@ const Endpoints = {
     deletePullRequestReviewProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],
     deleteRelease: ["DELETE /repos/{owner}/{repo}/releases/{release_id}"],
     deleteReleaseAsset: ["DELETE /repos/{owner}/{repo}/releases/assets/{asset_id}"],
+    deleteTagProtection: ["DELETE /repos/{owner}/{repo}/tags/protection/{tag_protection_id}"],
     deleteWebhook: ["DELETE /repos/{owner}/{repo}/hooks/{hook_id}"],
     disableAutomatedSecurityFixes: ["DELETE /repos/{owner}/{repo}/automated-security-fixes"],
     disableLfsForRepo: ["DELETE /repos/{owner}/{repo}/lfs"],
@@ -4800,11 +4879,7 @@ const Endpoints = {
     getAdminBranchProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
     getAllEnvironments: ["GET /repos/{owner}/{repo}/environments"],
     getAllStatusCheckContexts: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"],
-    getAllTopics: ["GET /repos/{owner}/{repo}/topics", {
-      mediaType: {
-        previews: ["mercy"]
-      }
-    }],
+    getAllTopics: ["GET /repos/{owner}/{repo}/topics"],
     getAppsWithAccessToProtectedBranch: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"],
     getAutolink: ["GET /repos/{owner}/{repo}/autolinks/{autolink_id}"],
     getBranch: ["GET /repos/{owner}/{repo}/branches/{branch}"],
@@ -4870,6 +4945,7 @@ const Endpoints = {
     listPullRequestsAssociatedWithCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls"],
     listReleaseAssets: ["GET /repos/{owner}/{repo}/releases/{release_id}/assets"],
     listReleases: ["GET /repos/{owner}/{repo}/releases"],
+    listTagProtection: ["GET /repos/{owner}/{repo}/tags/protection"],
     listTags: ["GET /repos/{owner}/{repo}/tags"],
     listTeams: ["GET /repos/{owner}/{repo}/teams"],
     listWebhookDeliveries: ["GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries"],
@@ -4893,11 +4969,7 @@ const Endpoints = {
       mapToData: "users"
     }],
     renameBranch: ["POST /repos/{owner}/{repo}/branches/{branch}/rename"],
-    replaceAllTopics: ["PUT /repos/{owner}/{repo}/topics", {
-      mediaType: {
-        previews: ["mercy"]
-      }
-    }],
+    replaceAllTopics: ["PUT /repos/{owner}/{repo}/topics"],
     requestPagesBuild: ["POST /repos/{owner}/{repo}/pages/builds"],
     setAdminBranchProtection: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
     setAppAccessRestrictions: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", {}, {
@@ -4938,17 +5010,15 @@ const Endpoints = {
     issuesAndPullRequests: ["GET /search/issues"],
     labels: ["GET /search/labels"],
     repos: ["GET /search/repositories"],
-    topics: ["GET /search/topics", {
-      mediaType: {
-        previews: ["mercy"]
-      }
-    }],
+    topics: ["GET /search/topics"],
     users: ["GET /search/users"]
   },
   secretScanning: {
     getAlert: ["GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"],
+    listAlertsForEnterprise: ["GET /enterprises/{enterprise}/secret-scanning/alerts"],
     listAlertsForOrg: ["GET /orgs/{org}/secret-scanning/alerts"],
     listAlertsForRepo: ["GET /repos/{owner}/{repo}/secret-scanning/alerts"],
+    listLocationsForAlert: ["GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations"],
     updateAlert: ["PATCH /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"]
   },
   teams: {
@@ -5064,7 +5134,7 @@ const Endpoints = {
   }
 };
 
-const VERSION = "5.13.0";
+const VERSION = "5.16.2";
 
 function endpointsToMethods(octokit, endpointsMap) {
   const newMethods = {};
@@ -5170,65 +5240,65 @@ exports.restEndpointMethods = restEndpointMethods;
 /***/ }),
 
 /***/ 3893:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((module) => {
 
-var v=Object.defineProperty,E=t=>v(t,"__esModule",{value:!0}),B=(t,e)=>()=>(e||(e={exports:{}},t(e.exports,e)),e.exports),A=(t,e)=>{E(t);for(var i in e)v(t,i,{get:e[i],enumerable:!0})},k=B((z,b)=>{b.exports=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39,43,50,90,70,120,80,30,50,50,70,90,40,50,40,50,70,70,70,70,70,70,70,70,70,70,50,50,90,90,90,60,110,75,75,77,85,70,63,85,83,46,50,76,61,93,82,87,66,87,76,75,68,81,75,110,75,68,75,50,50,50,90,70,70,66,69,57,69,66,39,69,70,30,38,65,30,110,70,67,69,69,47,57,43,70,65,90,65,65,58,70,50,70,90,0,61,110,110,110,110,110,110,110,110,110,110,110,110,110,55,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,55,110,39,43,70,70,70,70,50,70,70,110,60,71,90,0,110,70,60,90,60,60,70,71,70,40,70,60,60,71,110,110,110,60,75,75,75,75,75,75,110,77,70,70,70,70,46,46,46,46,85,82,87,87,87,87,87,90,87,81,81,81,81,68,67,68,66,66,66,66,66,66,110,57,66,66,66,66,30,30,30,30,67,70,67,67,67,67,67,90,67,70,70,70,70,65,69,65,75,66,75,66,75,66,77,57,77,57,77,57,77,57,85,71,85,69,70,66,70,66,70,66,70,66,70,66,85,69,85,69,85,69,85,69,83,70,83,70,46,30,46,30,46,30,46,30,46,30,96,68,50,38,76,65,65,61,30,61,30,61,33,61,50,62,31,82,70,82,70,82,70,80,82,70,87,67,87,67,87,67,120,110,76,47,76,47,76,47,75,57,75,57,75,57,75,57,68,43,68,43,68,43,81,70,81,70,81,69,81,70,81,70,81,69,110,90,68,65,68,75,58,75,58,75,58,33,69,77,64,69,75,62,76,76,59,83,96,64,69,65,60,83,58,59,70,79,72,100,43,43,73,64,42,65,120,81,68,86,89,67,120,98,74,69,70,59,56,65,58,41,74,41,70,83,73,86,78,68,74,67,63,61,61,56,57,70,70,52,50,67,29,48,50,32,140,140,130,94,90,61,110,110,99,76,61,32,32,85,68,76,68,76,68,81,70,76,68,81,70,61,76,61,76,61,100,94,88,69,79,69,72,64,85,68,85,68,61,56,28,140,140,130,85,69,110,61,82,70,75,66,110,110,87,67,72,60,76,61,63,58,60,61,30,27,32,32,76,63,85,68,68,37,70,45,71,61,76,68,75,57,68,43,58,55,81,68,81,100,85,68,67,63,76,61,60,61,85,68,85,68,85,68,85,68,69,57,63,100,63,28,100,100,75,81,56,62,68,55,55,62,62,81,95,75,75,62,61,25,96,69,87,44,86,69,61,69,69,69,56,61,70,70,61,66,86,51,51,71,64,45,70,69,65,59,65,68,68,68,42,41,45,56,53,33,72,100,100,100,69,70,69,68,89,86,84,45,45,47,45,45,45,45,61,61,56,47,48,53,59,41,41,72,73,68,57,85,57,53,63,77,56,59,49,49,49,53,85,58,65,67,69,53,64,51,70,50,49,110,110,130,88,78,96,110,74,77,68,64,71,71,40,40,26,27,27,35,35,51,36,26,52,35,22,28,29,29,31,31,38,39,40,40,70,70,20,70,31,31,20,40,31,31,42,42,31,31,50,50,50,50,70,70,70,70,70,70,23,38,41,20,35,40,31,43,43,43,43,43,42,42,37,46,48,24,24,26,26,32,31,47,47,41,27,31,31,31,31,42,42,50,0,0,53,0,51,68,52,39,49,0,46,51,53,38,47,0,52,52,39,39,39,11,46,47,44,44,26,17,41,48,48,48,48,25,25,0,49,46,21,40,41,38,40,57,53,53,52,52,52,51,68,68,62,62,68,62,79,41,0,40,57,48,41,68,0,0,52,42,53,38,40,51,47,45,52,52,52,57,44,0,45,41,52,48,45,45,56,41,20,48,51,47,83,52,51,51,51,51,51,45,44,36,45,44,44,45,44,51,40,41,45,45,46,37,65,51,32,32,79,64,79,79,68,56,56,56,50,66,79,79,79,79,70,70,75,50,83,96,59,79,97,79,83,100,30,75,75,62,77,70,75,83,87,46,76,75,93,82,71,87,83,66,79,74,68,68,90,75,96,90,46,68,69,56,70,30,69,69,68,65,67,56,50,70,69,30,65,65,70,65,55,67,70,69,56,69,55,69,87,65,90,89,30,69,67,69,89,62,57,64,59,59,70,85,86,61,85,68,73,59,59,56,60,56,73,88,98,92,74,61,74,55,73,73,67,66,81,61,51,45,61,67,56,33,86,58,58,63,67,76,95,80,78,81,81,81,70,70,87,62,77,75,46,46,50,120,120,90,76,83,68,83,75,75,75,62,82,70,110,68,83,83,76,81,93,83,87,83,66,77,68,68,90,75,84,78,110,110,86,100,75,77,110,78,66,68,65,52,68,66,88,58,70,70,65,68,77,70,67,70,69,59,55,65,92,65,71,67,96,98,70,87,63,60,92,66,66,66,70,52,60,57,30,30,38,100,100,70,65,70,65,70,97,85,69,60,99,82,66,59,97,83,94,81,120,110,57,53,76,77,75,63,69,55,69,55,130,110,75,62,96,84,97,85,71,59,69,0,0,0,0,0,0,0,78,63,69,60,70,62,62,52,62,52,67,55,110,88,65,56,76,65,76,65,72,57,90,76,83,70,110,78,110,96,82,66,72,58,66,53,68,65,68,65,75,65,99,74,75,60,78,67,78,70,85,65,85,65,30,100,84,69,60,78,64,78,62,78,63,75,60,96,82,30,72,60,72,60,100,93,63,58,83,66,76,58,100,84,65,56,64,64,78,63,78,63,76,63,87,67,75,63,74,59,69,52,69,52,69,52,75,60,61,46,95,85,65,45,69,55,69,55,68,62,90,95,87,71,59,55,110,89,110,91,68,57,78,70,74,59,78,64,84,76,91,75,110,81,85,68,100,87,75,69,110,88,120,100,76,66,74,68,49,44,98,89,62,58,73,65,79,84,63,81,81,68,71,63,60,80,75,64,57,80,72,66,65,77,79,68,80,61,81,70,59,66,73,67,81,68,81,61,54,63,69,75,69,64,77,79,79,44,37,33,42,29,38,0,79,82,56,67,70,55,58,52,56,63,63,55,30,84,58,54,55,51,57,58,58,30,56,48,58,45,81,48,67,58,58,83,70,56,43,81,65,55,69,59,79,39,44,79,79,79,79,88,79,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11,0,0,0,0,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,0,0,3.3,15,0,0,0,38,0,28,0,0,28,0,5,44,12,79,79,79,79,79,79,79,79,71,62,47,55,78,35,37,78,71,35,58,63,59,77,76,34,45,73,66,58,63,53,63,73,56,79,76,79,79,79,79,79,68,68,66,31,53,79,79,79,79,79,79,79,79,79,79,79,97,190,93,81,290,120,71,71,86,58,58,53,32,49,93,58,0,0,.9,0,0,0,0,0,0,0,9,32,0,79,27,39,89,35,32,32,43,32,70,32,70,39,70,70,64,64,64,45,45,45,45,100,100,120,120,66,66,64,64,77,77,70,70,70,22,86,60,60,52,45,59,39,43,70,70,0,.2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,58,58,58,58,58,58,58,58,58,58,58,58,58,57,70,60,0,32,32,32,0,47,58,54,70,70,70,70,70,70,70,70,70,64,64,64,64,64,64,64,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,100,100,100,120,120,66,64,86,86,86,86,86,86,60,60,77,77,77,60,60,60,77,77,77,77,77,77,52,52,52,52,59,59,59,59,59,57,64,39,49,49,49,43,43,43,43,43,43,43,43,70,79,70,43,70,70,64,64,35,39,7,4.1,.45,.099,0,0,0,95,61,0,0,0,0,24,0,25,38,0,0,70,0,0,0,0,45,45,51,51,58,58,58,58,58,58,58,58,100,120,64,51,48,57,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,70,70,70,70,70,70,70,64,64,45,45,45,100,64,64,64,86,86,77,77,77,45,45,59,59,59,52,45,45,100,64,64,100,45,64,32,32,70,70,70,43,43,64,64,64,100,100,60,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,96,96,74,84,100,74,70,54,83,83,61,47,64,26,52,120,92,52,37,73,88,79,96,96,96,38,83,100,74,66,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,58,40,41,34,33,79,79,79,79,79,79,56,62,79,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,0,0,0,0,0,73,73,73,100,80,80,110,58,58,52,74,91,79,60,60,60,60,110,110,110,110,85,87,61,70,68,71,75,82,85,77,55,63,60,58,83,61,71,58,70,56,56,62,87,62,64,64,67,44,45,78,81,81,60,79,63,75,56,73,100,73,54,100,100,100,73,73,73,73,73,73,73,73,100,100,100,100,73,100,100,130,0,0,73,73,73,73,73,85,87,61,82,60,58,87,67,91,79,73,73,52,82,51,53,54,54,56,59,58,72,53,52,55,34,80,80,110,110,80,80,57,82,67,61,80,50,61,62,62,73,120,120,79,98,130,54,72,73,75,83,68,79,79,78,83,79,79,66,78,76,72,70,69,76,58,65,88,85,100,60,60,73,60,67,75,74,60,67,69,79,72,83,60,79,64,62,60,79,81,79,79,79,77,62,72,54,79,79,73,51,100,100,100,73,73,73,73,79,79,100,100,79,79,130,130,73,57,79,79,79,79,79,79,79,79,100,79,79,79,79,73,60,79,62,83,68,73,73,79,79,65,58,53,80,55,67,70,62,76,69,61,60,46,66,44,75,70,30,62,58,70,30,79,79,79,79,79,34,23,32,79,89,110,97,98,78,78,79,79,79,79,73,89,79,79,78,89,76,76,90,92,75,76,79,76,79,73,73,79,75,76,78,75,76,76,76,79,79,76,75,77,75,75,91,73,79,78,78,79,76,75,79,75,73,79,79,12,79,26,23,50,64,64,79,79,79,79,62,62,79,79,67,58,19,79,79,79,19,79,79,79,79,79,79,79,76,90,76,75,79,75,79,79,79,79,79,79,79,93,68,69,70,77,76,70,70,80,77,36,26,73,78,170,46,79,79,79,79,79,79,79,79,79,79,79,89,89,28,79,94,120,71,78,82,95,88,83,94,79,94,94,120,79,120,120,63,84,79,70,65,74,86,92,92,76,70,79,63,76,98,71,74,63,71,73,79,74,63,85,89,67,74,56,79,74,90,79,74,79,74,81,65,79,79,89,56,120,100,120,89,89,89,89,89,79,89,89,120,79,120,120,89,79,79,120,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,95,83,89,89,79,79,74,46,56,62,72,74,57,85,59,75,47,100,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,28,46,48,79,84,100,88,90,91,90,90,62,79,79,70,91,79,79,75,95,87,84,84,84,94,83,70,87,84,79,84,85,84,84,79,84,74,85,73,79,79,75,94,85,88,75,82,87,79,87,87,79,85,80,75,75,85,79,79,4.7,50,98,78,98,78,78,78,78,79,79,140,140,79,79,150,150,78,79,79,79,79,79,79,79,79,78,98,79,79,79,79,84,84,79,90,89,64,78,78,79,79,67,56,56,91,69,59,70,62,55,61,81,63,19,44,70,57,81,91,79,79,79,79,79,79,79,79,79,79,62,76,79,98,120,100,69,100,120,79,79,79,78,78,86,79,83,83,170,78,79,79,79,91,71,79,83,79,100,85,79,79,79,140,75,79,79,79,74,100,64,79,79,79,73,76,59,70,88,93,73,80,100,100,110,130,79,79,79,79,120,80,64,110,120,79,79,79,140,130,160,79,190,180,230,62,79,79,92,79,79,79,79,79,79,150,79,79,79,79,79,79,79,79,79,79,79,79,36,55,59,69,69,65,66,81,91,70,95,90,78,76,85,91,80,160,81,130,140,81,110,79,79,79,79,79,73,110,140,110,79,97,94,85,110,99,130,160,110,79,84,84,89,79,83,83,85,57,99,66,120,85,88,88,84,140,110,93,68,90,90,92,90,90,90,90,84,79,84,84,90,90,120,140,68,97,85,71,97,84,61,84,84,120,79,79,79,70,110,73,73,110,140,120,150,79,73,73,73,79,73,73,110,73,79,79,79,79,79,79,79,73,73,79,88,84,90,79,79,79,79,79,200,150,73,73,79,79,64,62,77,55,65,71,50,57,65,50,79,79,79,79,79,79,79,79,58,28,52,82,74,74,73,86,42,61,120,93,79,90,85,92,120,120,140,120,110,79,81,81,84,79,81,81,84,68,94,70,87,81,81,95,81,140,120,85,73,82,82,85,81,88,88,88,80,79,81,81,86,86,120,140,73,90,90,83,79,83,72,81,83,87,79,79,61,52,120,71,110,100,130,89,130,79,74,110,120,79,140,180,110,110,79,79,79,79,79,79,79,97,89,79,79,79,79,79,79,79,90,79,150,150,69,80,79,79,72,67,85,83,83,92,85,82,99,67,79,59,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,42,31,79,140,150,99,180,70,150,88,110,79,120,120,180,79,70,120,150,97,88,83,130,110,91,130,88,160,140,57,64,120,120,140,96,81,61,92,92,100,78,110,130,64,64,97,67,63,84,72,63,88,94,110,120,120,81,79,79,42,110,89,88,96,96,100,100,79,130,120,180,79,170,160,200,66,19,79,79,79,79,79,79,79,79,150,79,79,79,79,79,79,79,79,88,120,70,81,79,79,64,86,88,110,68,97,130,48,88,100,92,96,130,76,82,110,79,79,79,120,150,100,68,110,94,110,79,79,68,48,79,91,130,130,130,92,90,95,150,150,200,110,170,100,110,160,100,100,170,79,79,79,120,110,100,94,110,120,100,90,88,180,170,150,100,95,100,110,100,140,130,110,96,83,110,100,79,100,88,100,110,120,110,100,99,88,79,99,79,79,97,110,88,100,120,110,100,79,79,79,86,79,79,79,79,120,130,130,89,89,89,79,89,79,140,160,160,220,190,190,220,150,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,200,63,160,79,79,79,79,79,79,79,79,79,79,79,21,66,63,63,70,69,70,52,58,67,64,65,90,90,73,73,59,76,94,90,69,69,66,69,61,68,72,72,65,65,74,74,73,69,67,53,66,64,73,56,69,71,66,69,74,64,63,68,48,56,56,110,56,56,56,56,56,56,56,79,79,79,79,75,35,64,56,61,46,57,67,56,56,56,56,56,56,56,56,81,64,68,72,75,68,66,64,84,68,73,85,140,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,68,60,79,62,79,79,56,61,79,60,79,79,62,79,79,79,79,79,79,64,66,69,71,79,68,58,58,74,73,73,74,79,68,61,60,79,61,79,59,79,79,61,84,79,61,61,58,56,0,47,47,0,0,0,0,0,0,79,0,0,54,79,79,38,65,37,37,37,79,65,79,0,0,0,0,36,0,79,79,61,56,55,63,56,58,69,69,73,69,79,79,110,110,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,69,54,85,85,130,66,130,160,42,63,71,18,18,27,50,27,27,34,120,65,40,71,52,83,45,37,32,55,55,34,55,58,38,38,60,57,76,55,63,63,52,56,56,60,57,76,55,63,63,56,56,55,58,41,55,33,60,6.3,150,150,54,54,31,47,57,57,57,56,52,59,57,52,79,51,52,52,52,56,52,52,52,52,56,52,57,57,57,56,57,59,57,52,56,52,52,54,52,62,54,59,57,57,57,52,66,56,54,58,58,79,79,79,79,60,55,60,61,120,56,120,56,120,53,54,57,57,22,51,54,60,41,41,15,57,41,37,0,58,52,58,79,79,79,79,56,56,56,56,56,56,56,56,79,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,59,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,79,56,56,64,43,54,65,45,36,50,71,39,61,66,64,68,79,70,55,220,52,23,130,53,70,72,67,70,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,120,66,68,120,66,68,120,66,84,110,120,75,66,75,68,130,120,120,63,68,69,68,68,68,120,68,120,67,120,68,120,120,66,110,79,120,130,66,66,65,79,130,240,79,120,65,65,65,65,120,65,79,79,79,65,65,90,68,65,76,81,65,65,170,68,66,66,66,66,66,68,68,68,68,23,43,66,81,66,97,68,68,68,68,66,94,120,170,65,65,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,73,74,78,77,67,87,73,86,62,70,86,77,69,75,78,76,81,68,65,75,75,78,71,69,69,69,70,85,65,73,69,74,81,63,67,67,74,87,79,79,79,79,79,79,79,79,79,79,51,63,64,100,56,60,80,110,65,53,130,55,56,95,57,59,91,54,85,92,86,56,88,51,58,53,62,56,56,63,55,87,52,74,63,60,54,60,93,66,66,66,66,59,66,79,79,79,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,79,79,79,79,79,0,0,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,95,110,110,110,95,79,79,79,79,79,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,79,79,79,79,79,79,76,99,71,73,72,80,99,120,71,91,91,71,94,81,120,95,110,130,130,110,130,110,110,130,120,150,130,120,130,120,120,130,110,130,110,110,110,120,110,110,67,78,76,99,92,68,90,99,74,97,97,74,96,74,74,97,84,100,100,84,100,88,84,100,94,94,94,94,94,94,94,94,110,79,130,94,94,130,79,79,97,97,97,97,97,110,97,79,110,79,140,97,97,120,79,79,78,99,99,78,98,100,78,99,84,100,100,84,100,100,84,100,85,85,85,86,86,85,85,85,85,86,85,86,85,100,87,85,76,95,90,76,89,74,110,110,110,79,110,83,89,110,79,79,58,77,72,70,71,75,87,81,83,96,91,83,89,83,100,86,70,95,95,70,94,72,71,87,79,100,100,79,100,79,79,99,120,79,110,95,100,110,79,79,98,120,120,98,120,98,98,79,140,79,130,120,120,130,79,79,100,120,100,100,100,130,100,130,74,98,95,72,95,72,78,79,82,100,100,82,100,99,82,100,120,120,120,120,120,140,120,120,64,80,91,65,100,77,90,110,84,110,110,82,100,93,91,110,84,110,100,78,100,99,91,100,85,110,110,84,110,100,92,110,64,92,67,70,66,88,64,79,110,79,100,69,81,100,79,79,81,100,81,81,81,97,87,81,120,140,140,120,140,120,120,140,150,150,150,150,180,150,150,150,73,97,95,72,95,93,74,95,76,98,97,73,96,95,77,95,74,98,76,67,76,72,77,91,94,95,100,95,110,92,94,92,85,86,85,86,85,85,85,85,89,130,100,79,79,79,79,78,100,33,68,39,39,39,55,33,100,61,56,59,60,72,66,67,71,62,46,82,82,96,60,71,87,90,58,62,110,79,79,79,170,160,130,170,120,110,98,140,110,110,120,140,110,97,86,120,32,60,32,32,60,76,51,99,110,56,79,79,79,79,79,79,81,74,71,77,110,41,70,80,59,69,81,54,66,100,68,97,50,62,120,100,70,66,80,99,57,91,90,91,68,78,83,59,83,100,73,63,68,88,72,130,89,100,110,57,87,120,63,71,56,72,74,54,100,63,76,84,84,81,58,92,78,67,67,76,73,95,62,76,91,80,80,71,86,90,120,83,94,63,63,130,74,88,73,88,68,79,79,79,56,67,46,74,50,79,79,79,79,87,87,87,87,82,82,82,82,82,82,82,88,88,88,88,88,88,97,100,97,100,82,100,97,100,97,82,73,65,54,35,35,50,50,38,53,55,35,23,44,45,44,120,98,110,120,91,91,91,91,84,84,84,84,84,84,84,92,92,92,94,92,91,95,100,95,100,100,95,100,95,84,46,15,40,90,90,90,90,77,77,77,77,77,77,77,110,100,100,110,100,110,91,92,91,92,92,91,92,91,93,38,110,110,96,96,69,69,69,69,69,69,69,69,69,84,84,81,87,81,87,84,84,84,84,84,84,84,84,84,43,43,85,88,87,87,72,72,72,72,72,72,72,72,72,87,87,87,87,87,87,87,87,87,87,87,87,87,87,87,41,41,71,68,68,68,68,68,68,68,68,80,86,84,77,84,77,77,84,77,84,84,77,84,77,82,38,38,38,47,67,100,100,100,100,100,100,100,100,100,120,120,120,100,120,100,100,60,50,60,96,96,96,96,96,96,96,96,96,110,110,110,110,110,110,96,110,96,110,110,97,110,97,55,49,74,65,65,65,65,65,65,65,65,65,77,80,80,77,81,77,70,85,70,85,81,83,86,78,80,39,45,39,55,39,39,39,120,120,110,110,95,95,95,75,75,75,75,110,110,110,110,110,110,90,90,90,90,90,90,90,90,57,64,64,64,64,64,64,64,64,64,79,79,79,79,79,79,82,79,82,79,79,79,79,79,79,38,51,37,37,100,100,100,100,100,100,68,68,68,68,68,68,83,83,40,49,74,89,89,89,89,94,94,94,94,110,110,54,92,92,92,92,92,92,82,82,82,82,98,98,50,90,90,77,77,66,90,90,77,77,86,86,86,84,84,84,84,54,78,37,110,110,110,110,110,110,110,82,69,69,69,69,89,89,89,89,130,130,130,110,110,130,130,60,93,69,69,69,69,100,100,100,100,60,96,96,96,96,96,96,55,64,64,64,64,64,64,64,38,63,56,56,56,56,63,63,63,63,80,80,80,80,80,80,80,80,80,80,80,80,91,91,83,83,83,83,91,91,83,83,83,83,91,91,84,84,84,84,91,91,84,84,84,84,88,88,75,75,75,75,88,88,71,71,71,71,90,90,76,76,76,76,44,110,110,62,62,62,62,110,110,73,73,73,73,110,110,73,73,73,73,52,72,72,98,98,98,98,110,110,62,62,62,62,90,90,75,75,75,75,70,70,70,100,100,100,100,100,74,74,100,100,100,100,100,100,69,69,69,69,100,100,71,71,71,71,96,96,69,68,68,69,110,110,70,70,70,70,130,130,64,64,64,64,84,84,76,76,76,76,45,45,84,84,76,76,76,76,110,110,62,62,62,62,110,110,68,68,68,68,41,110,110,70,70,70,70,110,110,62,62,62,62,110,110,70,70,70,70,69,53,110,160,160,170,140,140,160,160,79,79,79,79,79,79,79,79,79,54,54,76,98,120,140,54,76,98,120,140,54,76,98,120,140,54,76,98,120,140,81,140,110,120,140,98,81,81,79,79,79,67,67,52,52,52,63,53,53,43,55,55,59,69,45,45,69,67,55,50,65,65,65,70,69,69,53,41,41,71,30,71,45,71,20,30,82,84,71,45,71,64,79,59,41,20,32,67,67,43,50,53,45,53,45,65,65,56,32,43,50,66,54,67,65,110,71,110,79,69,65,56,20,67,53,62,32,32,62,69,56,48,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,66,66,66,100,66,66,66,66,140,100,66,66,66,100,140,66,66,68,66,66,66,66,66,66,66,100,39,100,39,66,66,100,100,110,64,66,100,66,100,66,66,78,68,66,66,66,66,66,66,66,66,66,0,0,94,61,61,61,61,52,52,52,99,110,110,91,91,98,130,140,52,87,79,52,66,52,52,53,52,52,52,52,52,52,51,68,38,58,200,71,130,42,58,54,79,79,58,58,73,97,65,65,65,77,65,62,79,79,79,79,79,79,41,45,18,72,45,44,31,59,31,49,79,79,79,79,79,79,62,24,32,33,42,61,20,33,36,37,20,0,0,0,0,110,58,69,54,47,62,47,61,57,57,63,110,110,110,110,110,110,69,66,53,47,47,47,52,54,59,43,51,52,50,70,58,61,47,56,43,42,41,42,40,43,39,61,49,53,44,47,53,60,71,44,35,32,47,52,50,63,49,50,56,57,50,57,58,55,48,42,47,49,39,41,41,46,49,44,61,54,48,67,40,45,51,42,57,82,48,48,50,48,48,45,42,55,61,62,57,49,50,56,59,42,84,43,51,57,110,110,110,110,110,110,110,110,49,35,54,58,57,42,64,44,52,51,58,46,45,37,45,40,42,42,53,60,63,55,47,49,42,54,48,46,63,51,56,58,56,47,67,52,63,62,32,45,51,66,110,110,110,110,110,110,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,71,58,73,97,65,65,65,77,65,62,140,140,140,160,140,140,70,58,73,97,65,65,65,77,65,62,140,140,140,160,140,140,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,62,77,93,64,64,70,72,57,52,32,37,62,52,80,69,73,64,73,73,74,100,68,66,66,56,62,62,54,68,74,92,74,61,85,63,57,48,64,54,57,69,56,63,65,35,48,33,39,40,31,31,37,39,19,24,35,29,45,38,38,42,40,32,35,33,38,44,39,39,40,57,40,40,36,36,31,31,40,21,38,60,40,40,33,40,40,40,27,40,44,60,35,40,40,39,39,54,40,21,28,41,36,40,40,39,55,38,100,68,70,40,92,61,69,44,40,55,40,55,61,42,61,98,24,24,61,60,63,61,61,31,78,55,24,92,61,61,37,55,43,55,55,55,61,61,61,61,50,50,72,24,55,24,61,60,41,39,38,41,35,25,25,41,42,17,17,17,17,30,17,17,30,63,63,42,42,42,42,41,37,17,24,42,43,42,39,35,39,39,39,41,43,52,52,0,0,52,52,52,52,56,56,38,57,57,48,41,43,79,79,79,60,58,59,53,46,48,48,79,44,46,33,42,47,45,44,43,47,45,42,45,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,0,0,72,60,63,69,75,69,63,69,77,57,82,69,85,69,82,69,82,69,82,69,70,66,70,66,60,61,60,61,60,61,59,40,79,69,81,68,83,70,81,68,81,68,81,68,32,32,46,30,76,65,76,65,72,64,61,30,59,32,59,32,59,32,93,110,95,100,93,110,81,68,82,70,81,68,81,68,87,67,85,68,87,67,87,67,66,69,61,69,70,45,76,47,70,45,70,45,59,56,75,57,59,56,59,56,59,56,70,41,68,43,70,41,70,41,76,68,76,68,76,68,81,70,76,68,75,65,75,65,110,90,110,90,110,90,94,85,110,90,69,67,69,67,69,57,67,63,75,58,67,63,68,41,85,57,61,36,47,46,92,55,75,66,75,66,75,66,75,66,75,66,75,66,75,66,75,66,75,66,75,66,75,66,75,66,70,66,70,66,70,66,70,66,70,66,70,66,70,66,70,66,46,30,46,30,87,67,87,67,87,67,87,67,87,67,87,67,87,67,89,67,89,67,89,67,89,67,89,67,81,70,81,70,83,73,83,73,83,73,83,73,83,73,68,65,68,65,68,65,68,65,100,65,56,49,50,50,76,76,76,76,76,76,76,76,76,79,100,100,97,98,86,84,52,52,52,52,52,52,79,79,79,79,100,100,100,100,79,79,68,68,68,68,68,68,68,68,100,100,120,120,120,120,110,100,40,40,40,40,40,40,40,40,51,51,73,75,73,74,60,56,68,68,68,68,68,68,79,79,100,100,130,130,120,76,79,79,66,66,66,66,66,66,66,66,79,96,79,120,79,120,79,100,99,99,99,99,99,99,99,99,100,110,130,130,120,120,110,110,69,69,56,56,70,70,30,30,67,67,69,69,89,89,79,79,76,76,76,76,76,76,76,76,120,120,140,140,140,140,130,120,68,68,68,68,68,68,68,68,140,140,160,160,160,160,150,150,99,99,99,99,99,99,99,99,140,150,170,170,160,160,150,150,76,76,76,76,76,79,76,76,76,76,75,75,120,68,30,68,68,68,68,68,68,79,68,68,70,83,83,96,120,68,68,68,40,40,30,30,79,79,40,40,32,32,46,59,79,68,68,68,66,66,69,69,67,67,66,66,70,70,68,83,80,70,70,70,79,79,99,99,99,79,99,99,87,97,90,100,130,70,68,79,55,110,55,110,37,28,18,70,40,22,6.9,0,0,0,0,0,64,64,70,70,110,110,65,70,30,30,30,30,50,50,50,50,70,70,60,52,37,52,90,35,0,0,0,0,0,0,0,19,170,150,40,61,61,36,60,83,39,50,50,79,69,46,70,55,55,51,100,36,40,36,36,89,78,78,70,70,60,60,53,35,55,53,61,110,55,77,65,110,65,65,110,65,77,110,31,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46,24,79,79,60,60,46,60,60,46,46,46,46,25,25,60,46,46,46,46,46,46,46,46,46,46,46,46,46,25,25,79,31,31,31,28,31,66,66,66,66,66,66,66,66,79,79,79,70,77,77,70,70,110,82,130,130,110,92,69]});A(exports,{badgen:()=>V,calcWidth:()=>x});var S=k(),T=t=>{let e=t[64];return([...i])=>{let r=0,g=0,n=i.length;for(;n--;)g=t[i[n].charCodeAt()],r+=g===void 0?e:g;return r}},x=T(S);var d={green:"3C1",blue:"08C",red:"E43",yellow:"DB1",orange:"F73",purple:"94E",pink:"E5B",grey:"999",gray:"999",cyan:"1BC",black:"2A2A2A"};function V({label:t,subject:e,status:i,color:r="blue",style:g,icon:n,iconWidth:h=13,labelColor:f="555",scale:l=1}){if(L(typeof i=="string","<status> must be string"),t=t===void 0?e:t,!t&&!n)return W({status:i,color:r,style:g,scale:l});r=d[r]||r,f=d[f]||f,h=h*10;let m=n?t.length?h+30:h-18:0,c=n?m+50:50,o=x(t),$=x(i),a=o+100+m,w=$+100,s=a+w,u=n?' xmlns:xlink="http://www.w3.org/1999/xlink"':"";t=y(t),i=y(i);let p=j({label:t,status:i});return g==="flat"?`<svg width="${l*s/10}" height="${l*20}" viewBox="0 0 ${s} 200" xmlns="http://www.w3.org/2000/svg"${u} role="img" aria-label="${p}">
-  <title>${p}</title>
+var u=Object.defineProperty;var A=Object.getOwnPropertyDescriptor;var P=Object.getOwnPropertyNames;var S=Object.prototype.hasOwnProperty;var T=(t,e)=>()=>(e||t((e={exports:{}}).exports,e),e.exports),W=(t,e)=>{for(var i in e)u(t,i,{get:e[i],enumerable:!0})},F=(t,e,i,n)=>{if(e&&typeof e=="object"||typeof e=="function")for(let g of P(e))!S.call(t,g)&&g!==i&&u(t,g,{get:()=>e[g],enumerable:!(n=A(e,g))||n.enumerable});return t};var j=t=>F(u({},"__esModule",{value:!0}),t);var V=T((C,D)=>{D.exports=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39,43,50,90,70,120,80,30,50,50,70,90,40,50,40,50,70,70,70,70,70,70,70,70,70,70,50,50,90,90,90,60,110,75,75,77,85,70,63,85,83,46,50,76,61,93,82,87,66,87,76,75,68,81,75,110,75,68,75,50,50,50,90,70,70,66,69,57,69,66,39,69,70,30,38,65,30,110,70,67,69,69,47,57,43,70,65,90,65,65,58,70,50,70,90,0,61,110,110,110,110,110,110,110,110,110,110,110,110,110,55,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,55,110,39,43,70,70,70,70,50,70,70,110,60,71,90,0,110,70,60,90,60,60,70,71,70,40,70,60,60,71,110,110,110,60,75,75,75,75,75,75,110,77,70,70,70,70,46,46,46,46,85,82,87,87,87,87,87,90,87,81,81,81,81,68,67,68,66,66,66,66,66,66,110,57,66,66,66,66,30,30,30,30,67,70,67,67,67,67,67,90,67,70,70,70,70,65,69,65,75,66,75,66,75,66,77,57,77,57,77,57,77,57,85,71,85,69,70,66,70,66,70,66,70,66,70,66,85,69,85,69,85,69,85,69,83,70,83,70,46,30,46,30,46,30,46,30,46,30,96,68,50,38,76,65,65,61,30,61,30,61,33,61,50,62,31,82,70,82,70,82,70,80,82,70,87,67,87,67,87,67,120,110,76,47,76,47,76,47,75,57,75,57,75,57,75,57,68,43,68,43,68,43,81,70,81,70,81,69,81,70,81,70,81,69,110,90,68,65,68,75,58,75,58,75,58,33,69,77,64,69,75,62,76,76,59,83,96,64,69,65,60,83,58,59,70,79,72,100,43,43,73,64,42,65,120,81,68,86,89,67,120,98,74,69,70,59,56,65,58,41,74,41,70,83,73,86,78,68,74,67,63,61,61,56,57,70,70,52,50,67,29,48,50,32,140,140,130,94,90,61,110,110,99,76,61,32,32,85,68,76,68,76,68,81,70,76,68,81,70,61,76,61,76,61,100,94,88,69,79,69,72,64,85,68,85,68,61,56,28,140,140,130,85,69,110,61,82,70,75,66,110,110,87,67,72,60,76,61,63,58,60,61,30,27,32,32,76,63,85,68,68,37,70,45,71,61,76,68,75,57,68,43,58,55,81,68,81,100,85,68,67,63,76,61,60,61,85,68,85,68,85,68,85,68,69,57,63,100,63,28,100,100,75,81,56,62,68,55,55,62,62,81,95,75,75,62,61,25,96,69,87,44,86,69,61,69,69,69,56,61,70,70,61,66,86,51,51,71,64,45,70,69,65,59,65,68,68,68,42,41,45,56,53,33,72,100,100,100,69,70,69,68,89,86,84,45,45,47,45,45,45,45,61,61,56,47,48,53,59,41,41,72,73,68,57,85,57,53,63,77,56,59,49,49,49,53,85,58,65,67,69,53,64,51,70,50,49,110,110,130,88,78,96,110,74,77,68,64,71,71,40,40,26,27,27,35,35,51,36,26,52,35,22,28,29,29,31,31,38,39,40,40,70,70,20,70,31,31,20,40,31,31,42,42,31,31,50,50,50,50,70,70,70,70,70,70,23,38,41,20,35,40,31,43,43,43,43,43,42,42,37,46,48,24,24,26,26,32,31,47,47,41,27,31,31,31,31,42,42,50,0,0,53,0,51,68,52,39,49,0,46,51,53,38,47,0,52,52,39,39,39,11,46,47,44,44,26,17,41,48,48,48,48,25,25,0,49,46,21,40,41,38,40,57,53,53,52,52,52,51,68,68,62,62,68,62,79,41,0,40,57,48,41,68,0,0,52,42,53,38,40,51,47,45,52,52,52,57,44,0,45,41,52,48,45,45,56,41,20,48,51,47,83,52,51,51,51,51,51,45,44,36,45,44,44,45,44,51,40,41,45,45,46,37,65,51,32,32,79,64,79,79,68,56,56,56,50,66,79,79,79,79,70,70,75,50,83,96,59,79,97,79,83,100,30,75,75,62,77,70,75,83,87,46,76,75,93,82,71,87,83,66,79,74,68,68,90,75,96,90,46,68,69,56,70,30,69,69,68,65,67,56,50,70,69,30,65,65,70,65,55,67,70,69,56,69,55,69,87,65,90,89,30,69,67,69,89,62,57,64,59,59,70,85,86,61,85,68,73,59,59,56,60,56,73,88,98,92,74,61,74,55,73,73,67,66,81,61,51,45,61,67,56,33,86,58,58,63,67,76,95,80,78,81,81,81,70,70,87,62,77,75,46,46,50,120,120,90,76,83,68,83,75,75,75,62,82,70,110,68,83,83,76,81,93,83,87,83,66,77,68,68,90,75,84,78,110,110,86,100,75,77,110,78,66,68,65,52,68,66,88,58,70,70,65,68,77,70,67,70,69,59,55,65,92,65,71,67,96,98,70,87,63,60,92,66,66,66,70,52,60,57,30,30,38,100,100,70,65,70,65,70,97,85,69,60,99,82,66,59,97,83,94,81,120,110,57,53,76,77,75,63,69,55,69,55,130,110,75,62,96,84,97,85,71,59,69,0,0,0,0,0,0,0,78,63,69,60,70,62,62,52,62,52,67,55,110,88,65,56,76,65,76,65,72,57,90,76,83,70,110,78,110,96,82,66,72,58,66,53,68,65,68,65,75,65,99,74,75,60,78,67,78,70,85,65,85,65,30,100,84,69,60,78,64,78,62,78,63,75,60,96,82,30,72,60,72,60,100,93,63,58,83,66,76,58,100,84,65,56,64,64,78,63,78,63,76,63,87,67,75,63,74,59,69,52,69,52,69,52,75,60,61,46,95,85,65,45,69,55,69,55,68,62,90,95,87,71,59,55,110,89,110,91,68,57,78,70,74,59,78,64,84,76,91,75,110,81,85,68,100,87,75,69,110,88,120,100,76,66,74,68,49,44,98,89,62,58,73,65,79,84,63,81,81,68,71,63,60,80,75,64,57,80,72,66,65,77,79,68,80,61,81,70,59,66,73,67,81,68,81,61,54,63,69,75,69,64,77,79,79,44,37,33,42,29,38,0,79,82,56,67,70,55,58,52,56,63,63,55,30,84,58,54,55,51,57,58,58,30,56,48,58,45,81,48,67,58,58,83,70,56,43,81,65,55,69,59,79,39,44,79,79,79,79,88,79,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11,0,0,0,0,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,0,0,3.3,15,0,0,0,38,0,28,0,0,28,0,5,44,12,79,79,79,79,79,79,79,79,71,62,47,55,78,35,37,78,71,35,58,63,59,77,76,34,45,73,66,58,63,53,63,73,56,79,76,79,79,79,79,79,68,68,66,31,53,79,79,79,79,79,79,79,79,79,79,79,97,190,93,81,290,120,71,71,86,58,58,53,32,49,93,58,0,0,.9,0,0,0,0,0,0,0,9,32,0,79,27,39,89,35,32,32,43,32,70,32,70,39,70,70,64,64,64,45,45,45,45,100,100,120,120,66,66,64,64,77,77,70,70,70,22,86,60,60,52,45,59,39,43,70,70,0,.2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,58,58,58,58,58,58,58,58,58,58,58,58,58,57,70,60,0,32,32,32,0,47,58,54,70,70,70,70,70,70,70,70,70,64,64,64,64,64,64,64,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,100,100,100,120,120,66,64,86,86,86,86,86,86,60,60,77,77,77,60,60,60,77,77,77,77,77,77,52,52,52,52,59,59,59,59,59,57,64,39,49,49,49,43,43,43,43,43,43,43,43,70,79,70,43,70,70,64,64,35,39,7,4.1,.45,.099,0,0,0,95,61,0,0,0,0,24,0,25,38,0,0,70,0,0,0,0,45,45,51,51,58,58,58,58,58,58,58,58,100,120,64,51,48,57,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,70,70,70,70,70,70,70,64,64,45,45,45,100,64,64,64,86,86,77,77,77,45,45,59,59,59,52,45,45,100,64,64,100,45,64,32,32,70,70,70,43,43,64,64,64,100,100,60,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,96,96,74,84,100,74,70,54,83,83,61,47,64,26,52,120,92,52,37,73,88,79,96,96,96,38,83,100,74,66,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,58,40,41,34,33,79,79,79,79,79,79,56,62,79,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,0,0,0,0,0,73,73,73,100,80,80,110,58,58,52,74,91,79,60,60,60,60,110,110,110,110,85,87,61,70,68,71,75,82,85,77,55,63,60,58,83,61,71,58,70,56,56,62,87,62,64,64,67,44,45,78,81,81,60,79,63,75,56,73,100,73,54,100,100,100,73,73,73,73,73,73,73,73,100,100,100,100,73,100,100,130,0,0,73,73,73,73,73,85,87,61,82,60,58,87,67,91,79,73,73,52,82,51,53,54,54,56,59,58,72,53,52,55,34,80,80,110,110,80,80,57,82,67,61,80,50,61,62,62,73,120,120,79,98,130,54,72,73,75,83,68,79,79,78,83,79,79,66,78,76,72,70,69,76,58,65,88,85,100,60,60,73,60,67,75,74,60,67,69,79,72,83,60,79,64,62,60,79,81,79,79,79,77,62,72,54,79,79,73,51,100,100,100,73,73,73,73,79,79,100,100,79,79,130,130,73,57,79,79,79,79,79,79,79,79,100,79,79,79,79,73,60,79,62,83,68,73,73,79,79,65,58,53,80,55,67,70,62,76,69,61,60,46,66,44,75,70,30,62,58,70,30,79,79,79,79,79,34,23,32,79,89,110,97,98,78,78,79,79,79,79,73,89,79,79,78,89,76,76,90,92,75,76,79,76,79,73,73,79,75,76,78,75,76,76,76,79,79,76,75,77,75,75,91,73,79,78,78,79,76,75,79,75,73,79,79,12,79,26,23,50,64,64,79,79,79,79,62,62,79,79,67,58,19,79,79,79,19,79,79,79,79,79,79,79,76,90,76,75,79,75,79,79,79,79,79,79,79,93,68,69,70,77,76,70,70,80,77,36,26,73,78,170,46,79,79,79,79,79,79,79,79,79,79,79,89,89,28,79,94,120,71,78,82,95,88,83,94,79,94,94,120,79,120,120,63,84,79,70,65,74,86,92,92,76,70,79,63,76,98,71,74,63,71,73,79,74,63,85,89,67,74,56,79,74,90,79,74,79,74,81,65,79,79,89,56,120,100,120,89,89,89,89,89,79,89,89,120,79,120,120,89,79,79,120,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,95,83,89,89,79,79,74,46,56,62,72,74,57,85,59,75,47,100,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,28,46,48,79,84,100,88,90,91,90,90,62,79,79,70,91,79,79,75,95,87,84,84,84,94,83,70,87,84,79,84,85,84,84,79,84,74,85,73,79,79,75,94,85,88,75,82,87,79,87,87,79,85,80,75,75,85,79,79,4.7,50,98,78,98,78,78,78,78,79,79,140,140,79,79,150,150,78,79,79,79,79,79,79,79,79,78,98,79,79,79,79,84,84,79,90,89,64,78,78,79,79,67,56,56,91,69,59,70,62,55,61,81,63,19,44,70,57,81,91,79,79,79,79,79,79,79,79,79,79,62,76,79,98,120,100,69,100,120,79,79,79,78,78,86,79,83,83,170,78,79,79,79,91,71,79,83,79,100,85,79,79,79,140,75,79,79,79,74,100,64,79,79,79,73,76,59,70,88,93,73,80,100,100,110,130,79,79,79,79,120,80,64,110,120,79,79,79,140,130,160,79,190,180,230,62,79,79,92,79,79,79,79,79,79,150,79,79,79,79,79,79,79,79,79,79,79,79,36,55,59,69,69,65,66,81,91,70,95,90,78,76,85,91,80,160,81,130,140,81,110,79,79,79,79,79,73,110,140,110,79,97,94,85,110,99,130,160,110,79,84,84,89,79,83,83,85,57,99,66,120,85,88,88,84,140,110,93,68,90,90,92,90,90,90,90,84,79,84,84,90,90,120,140,68,97,85,71,97,84,61,84,84,120,79,79,79,70,110,73,73,110,140,120,150,79,73,73,73,79,73,73,110,73,79,79,79,79,79,79,79,73,73,79,88,84,90,79,79,79,79,79,200,150,73,73,79,79,64,62,77,55,65,71,50,57,65,50,79,79,79,79,79,79,79,79,58,28,52,82,74,74,73,86,42,61,120,93,79,90,85,92,120,120,140,120,110,79,81,81,84,79,81,81,84,68,94,70,87,81,81,95,81,140,120,85,73,82,82,85,81,88,88,88,80,79,81,81,86,86,120,140,73,90,90,83,79,83,72,81,83,87,79,79,61,52,120,71,110,100,130,89,130,79,74,110,120,79,140,180,110,110,79,79,79,79,79,79,79,97,89,79,79,79,79,79,79,79,90,79,150,150,69,80,79,79,72,67,85,83,83,92,85,82,99,67,79,59,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,42,31,79,140,150,99,180,70,150,88,110,79,120,120,180,79,70,120,150,97,88,83,130,110,91,130,88,160,140,57,64,120,120,140,96,81,61,92,92,100,78,110,130,64,64,97,67,63,84,72,63,88,94,110,120,120,81,79,79,42,110,89,88,96,96,100,100,79,130,120,180,79,170,160,200,66,19,79,79,79,79,79,79,79,79,150,79,79,79,79,79,79,79,79,88,120,70,81,79,79,64,86,88,110,68,97,130,48,88,100,92,96,130,76,82,110,79,79,79,120,150,100,68,110,94,110,79,79,68,48,79,91,130,130,130,92,90,95,150,150,200,110,170,100,110,160,100,100,170,79,79,79,120,110,100,94,110,120,100,90,88,180,170,150,100,95,100,110,100,140,130,110,96,83,110,100,79,100,88,100,110,120,110,100,99,88,79,99,79,79,97,110,88,100,120,110,100,79,79,79,86,79,79,79,79,120,130,130,89,89,89,79,89,79,140,160,160,220,190,190,220,150,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,200,63,160,79,79,79,79,79,79,79,79,79,79,79,21,66,63,63,70,69,70,52,58,67,64,65,90,90,73,73,59,76,94,90,69,69,66,69,61,68,72,72,65,65,74,74,73,69,67,53,66,64,73,56,69,71,66,69,74,64,63,68,48,56,56,110,56,56,56,56,56,56,56,79,79,79,79,75,35,64,56,61,46,57,67,56,56,56,56,56,56,56,56,81,64,68,72,75,68,66,64,84,68,73,85,140,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,68,60,79,62,79,79,56,61,79,60,79,79,62,79,79,79,79,79,79,64,66,69,71,79,68,58,58,74,73,73,74,79,68,61,60,79,61,79,59,79,79,61,84,79,61,61,58,56,0,47,47,0,0,0,0,0,0,79,0,0,54,79,79,38,65,37,37,37,79,65,79,0,0,0,0,36,0,79,79,61,56,55,63,56,58,69,69,73,69,79,79,110,110,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,69,54,85,85,130,66,130,160,42,63,71,18,18,27,50,27,27,34,120,65,40,71,52,83,45,37,32,55,55,34,55,58,38,38,60,57,76,55,63,63,52,56,56,60,57,76,55,63,63,56,56,55,58,41,55,33,60,6.3,150,150,54,54,31,47,57,57,57,56,52,59,57,52,79,51,52,52,52,56,52,52,52,52,56,52,57,57,57,56,57,59,57,52,56,52,52,54,52,62,54,59,57,57,57,52,66,56,54,58,58,79,79,79,79,60,55,60,61,120,56,120,56,120,53,54,57,57,22,51,54,60,41,41,15,57,41,37,0,58,52,58,79,79,79,79,56,56,56,56,56,56,56,56,79,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,59,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,56,79,56,56,64,43,54,65,45,36,50,71,39,61,66,64,68,79,70,55,220,52,23,130,53,70,72,67,70,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,120,66,68,120,66,68,120,66,84,110,120,75,66,75,68,130,120,120,63,68,69,68,68,68,120,68,120,67,120,68,120,120,66,110,79,120,130,66,66,65,79,130,240,79,120,65,65,65,65,120,65,79,79,79,65,65,90,68,65,76,81,65,65,170,68,66,66,66,66,66,68,68,68,68,23,43,66,81,66,97,68,68,68,68,66,94,120,170,65,65,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,73,74,78,77,67,87,73,86,62,70,86,77,69,75,78,76,81,68,65,75,75,78,71,69,69,69,70,85,65,73,69,74,81,63,67,67,74,87,79,79,79,79,79,79,79,79,79,79,51,63,64,100,56,60,80,110,65,53,130,55,56,95,57,59,91,54,85,92,86,56,88,51,58,53,62,56,56,63,55,87,52,74,63,60,54,60,93,66,66,66,66,59,66,79,79,79,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,79,79,79,79,79,0,0,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,95,110,110,110,95,79,79,79,79,79,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,95,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,110,79,79,79,79,79,79,76,99,71,73,72,80,99,120,71,91,91,71,94,81,120,95,110,130,130,110,130,110,110,130,120,150,130,120,130,120,120,130,110,130,110,110,110,120,110,110,67,78,76,99,92,68,90,99,74,97,97,74,96,74,74,97,84,100,100,84,100,88,84,100,94,94,94,94,94,94,94,94,110,79,130,94,94,130,79,79,97,97,97,97,97,110,97,79,110,79,140,97,97,120,79,79,78,99,99,78,98,100,78,99,84,100,100,84,100,100,84,100,85,85,85,86,86,85,85,85,85,86,85,86,85,100,87,85,76,95,90,76,89,74,110,110,110,79,110,83,89,110,79,79,58,77,72,70,71,75,87,81,83,96,91,83,89,83,100,86,70,95,95,70,94,72,71,87,79,100,100,79,100,79,79,99,120,79,110,95,100,110,79,79,98,120,120,98,120,98,98,79,140,79,130,120,120,130,79,79,100,120,100,100,100,130,100,130,74,98,95,72,95,72,78,79,82,100,100,82,100,99,82,100,120,120,120,120,120,140,120,120,64,80,91,65,100,77,90,110,84,110,110,82,100,93,91,110,84,110,100,78,100,99,91,100,85,110,110,84,110,100,92,110,64,92,67,70,66,88,64,79,110,79,100,69,81,100,79,79,81,100,81,81,81,97,87,81,120,140,140,120,140,120,120,140,150,150,150,150,180,150,150,150,73,97,95,72,95,93,74,95,76,98,97,73,96,95,77,95,74,98,76,67,76,72,77,91,94,95,100,95,110,92,94,92,85,86,85,86,85,85,85,85,89,130,100,79,79,79,79,78,100,33,68,39,39,39,55,33,100,61,56,59,60,72,66,67,71,62,46,82,82,96,60,71,87,90,58,62,110,79,79,79,170,160,130,170,120,110,98,140,110,110,120,140,110,97,86,120,32,60,32,32,60,76,51,99,110,56,79,79,79,79,79,79,81,74,71,77,110,41,70,80,59,69,81,54,66,100,68,97,50,62,120,100,70,66,80,99,57,91,90,91,68,78,83,59,83,100,73,63,68,88,72,130,89,100,110,57,87,120,63,71,56,72,74,54,100,63,76,84,84,81,58,92,78,67,67,76,73,95,62,76,91,80,80,71,86,90,120,83,94,63,63,130,74,88,73,88,68,79,79,79,56,67,46,74,50,79,79,79,79,87,87,87,87,82,82,82,82,82,82,82,88,88,88,88,88,88,97,100,97,100,82,100,97,100,97,82,73,65,54,35,35,50,50,38,53,55,35,23,44,45,44,120,98,110,120,91,91,91,91,84,84,84,84,84,84,84,92,92,92,94,92,91,95,100,95,100,100,95,100,95,84,46,15,40,90,90,90,90,77,77,77,77,77,77,77,110,100,100,110,100,110,91,92,91,92,92,91,92,91,93,38,110,110,96,96,69,69,69,69,69,69,69,69,69,84,84,81,87,81,87,84,84,84,84,84,84,84,84,84,43,43,85,88,87,87,72,72,72,72,72,72,72,72,72,87,87,87,87,87,87,87,87,87,87,87,87,87,87,87,41,41,71,68,68,68,68,68,68,68,68,80,86,84,77,84,77,77,84,77,84,84,77,84,77,82,38,38,38,47,67,100,100,100,100,100,100,100,100,100,120,120,120,100,120,100,100,60,50,60,96,96,96,96,96,96,96,96,96,110,110,110,110,110,110,96,110,96,110,110,97,110,97,55,49,74,65,65,65,65,65,65,65,65,65,77,80,80,77,81,77,70,85,70,85,81,83,86,78,80,39,45,39,55,39,39,39,120,120,110,110,95,95,95,75,75,75,75,110,110,110,110,110,110,90,90,90,90,90,90,90,90,57,64,64,64,64,64,64,64,64,64,79,79,79,79,79,79,82,79,82,79,79,79,79,79,79,38,51,37,37,100,100,100,100,100,100,68,68,68,68,68,68,83,83,40,49,74,89,89,89,89,94,94,94,94,110,110,54,92,92,92,92,92,92,82,82,82,82,98,98,50,90,90,77,77,66,90,90,77,77,86,86,86,84,84,84,84,54,78,37,110,110,110,110,110,110,110,82,69,69,69,69,89,89,89,89,130,130,130,110,110,130,130,60,93,69,69,69,69,100,100,100,100,60,96,96,96,96,96,96,55,64,64,64,64,64,64,64,38,63,56,56,56,56,63,63,63,63,80,80,80,80,80,80,80,80,80,80,80,80,91,91,83,83,83,83,91,91,83,83,83,83,91,91,84,84,84,84,91,91,84,84,84,84,88,88,75,75,75,75,88,88,71,71,71,71,90,90,76,76,76,76,44,110,110,62,62,62,62,110,110,73,73,73,73,110,110,73,73,73,73,52,72,72,98,98,98,98,110,110,62,62,62,62,90,90,75,75,75,75,70,70,70,100,100,100,100,100,74,74,100,100,100,100,100,100,69,69,69,69,100,100,71,71,71,71,96,96,69,68,68,69,110,110,70,70,70,70,130,130,64,64,64,64,84,84,76,76,76,76,45,45,84,84,76,76,76,76,110,110,62,62,62,62,110,110,68,68,68,68,41,110,110,70,70,70,70,110,110,62,62,62,62,110,110,70,70,70,70,69,53,110,160,160,170,140,140,160,160,79,79,79,79,79,79,79,79,79,54,54,76,98,120,140,54,76,98,120,140,54,76,98,120,140,54,76,98,120,140,81,140,110,120,140,98,81,81,79,79,79,67,67,52,52,52,63,53,53,43,55,55,59,69,45,45,69,67,55,50,65,65,65,70,69,69,53,41,41,71,30,71,45,71,20,30,82,84,71,45,71,64,79,59,41,20,32,67,67,43,50,53,45,53,45,65,65,56,32,43,50,66,54,67,65,110,71,110,79,69,65,56,20,67,53,62,32,32,62,69,56,48,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,66,66,66,100,66,66,66,66,140,100,66,66,66,100,140,66,66,68,66,66,66,66,66,66,66,100,39,100,39,66,66,100,100,110,64,66,100,66,100,66,66,78,68,66,66,66,66,66,66,66,66,66,0,0,94,61,61,61,61,52,52,52,99,110,110,91,91,98,130,140,52,87,79,52,66,52,52,53,52,52,52,52,52,52,51,68,38,58,200,71,130,42,58,54,79,79,58,58,73,97,65,65,65,77,65,62,79,79,79,79,79,79,41,45,18,72,45,44,31,59,31,49,79,79,79,79,79,79,62,24,32,33,42,61,20,33,36,37,20,0,0,0,0,110,58,69,54,47,62,47,61,57,57,63,110,110,110,110,110,110,69,66,53,47,47,47,52,54,59,43,51,52,50,70,58,61,47,56,43,42,41,42,40,43,39,61,49,53,44,47,53,60,71,44,35,32,47,52,50,63,49,50,56,57,50,57,58,55,48,42,47,49,39,41,41,46,49,44,61,54,48,67,40,45,51,42,57,82,48,48,50,48,48,45,42,55,61,62,57,49,50,56,59,42,84,43,51,57,110,110,110,110,110,110,110,110,49,35,54,58,57,42,64,44,52,51,58,46,45,37,45,40,42,42,53,60,63,55,47,49,42,54,48,46,63,51,56,58,56,47,67,52,63,62,32,45,51,66,110,110,110,110,110,110,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,71,58,73,97,65,65,65,77,65,62,140,140,140,160,140,140,70,58,73,97,65,65,65,77,65,62,140,140,140,160,140,140,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,62,77,93,64,64,70,72,57,52,32,37,62,52,80,69,73,64,73,73,74,100,68,66,66,56,62,62,54,68,74,92,74,61,85,63,57,48,64,54,57,69,56,63,65,35,48,33,39,40,31,31,37,39,19,24,35,29,45,38,38,42,40,32,35,33,38,44,39,39,40,57,40,40,36,36,31,31,40,21,38,60,40,40,33,40,40,40,27,40,44,60,35,40,40,39,39,54,40,21,28,41,36,40,40,39,55,38,100,68,70,40,92,61,69,44,40,55,40,55,61,42,61,98,24,24,61,60,63,61,61,31,78,55,24,92,61,61,37,55,43,55,55,55,61,61,61,61,50,50,72,24,55,24,61,60,41,39,38,41,35,25,25,41,42,17,17,17,17,30,17,17,30,63,63,42,42,42,42,41,37,17,24,42,43,42,39,35,39,39,39,41,43,52,52,0,0,52,52,52,52,56,56,38,57,57,48,41,43,79,79,79,60,58,59,53,46,48,48,79,44,46,33,42,47,45,44,43,47,45,42,45,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,0,0,72,60,63,69,75,69,63,69,77,57,82,69,85,69,82,69,82,69,82,69,70,66,70,66,60,61,60,61,60,61,59,40,79,69,81,68,83,70,81,68,81,68,81,68,32,32,46,30,76,65,76,65,72,64,61,30,59,32,59,32,59,32,93,110,95,100,93,110,81,68,82,70,81,68,81,68,87,67,85,68,87,67,87,67,66,69,61,69,70,45,76,47,70,45,70,45,59,56,75,57,59,56,59,56,59,56,70,41,68,43,70,41,70,41,76,68,76,68,76,68,81,70,76,68,75,65,75,65,110,90,110,90,110,90,94,85,110,90,69,67,69,67,69,57,67,63,75,58,67,63,68,41,85,57,61,36,47,46,92,55,75,66,75,66,75,66,75,66,75,66,75,66,75,66,75,66,75,66,75,66,75,66,75,66,70,66,70,66,70,66,70,66,70,66,70,66,70,66,70,66,46,30,46,30,87,67,87,67,87,67,87,67,87,67,87,67,87,67,89,67,89,67,89,67,89,67,89,67,81,70,81,70,83,73,83,73,83,73,83,73,83,73,68,65,68,65,68,65,68,65,100,65,56,49,50,50,76,76,76,76,76,76,76,76,76,79,100,100,97,98,86,84,52,52,52,52,52,52,79,79,79,79,100,100,100,100,79,79,68,68,68,68,68,68,68,68,100,100,120,120,120,120,110,100,40,40,40,40,40,40,40,40,51,51,73,75,73,74,60,56,68,68,68,68,68,68,79,79,100,100,130,130,120,76,79,79,66,66,66,66,66,66,66,66,79,96,79,120,79,120,79,100,99,99,99,99,99,99,99,99,100,110,130,130,120,120,110,110,69,69,56,56,70,70,30,30,67,67,69,69,89,89,79,79,76,76,76,76,76,76,76,76,120,120,140,140,140,140,130,120,68,68,68,68,68,68,68,68,140,140,160,160,160,160,150,150,99,99,99,99,99,99,99,99,140,150,170,170,160,160,150,150,76,76,76,76,76,79,76,76,76,76,75,75,120,68,30,68,68,68,68,68,68,79,68,68,70,83,83,96,120,68,68,68,40,40,30,30,79,79,40,40,32,32,46,59,79,68,68,68,66,66,69,69,67,67,66,66,70,70,68,83,80,70,70,70,79,79,99,99,99,79,99,99,87,97,90,100,130,70,68,79,55,110,55,110,37,28,18,70,40,22,6.9,0,0,0,0,0,64,64,70,70,110,110,65,70,30,30,30,30,50,50,50,50,70,70,60,52,37,52,90,35,0,0,0,0,0,0,0,19,170,150,40,61,61,36,60,83,39,50,50,79,69,46,70,55,55,51,100,36,40,36,36,89,78,78,70,70,60,60,53,35,55,53,61,110,55,77,65,110,65,65,110,65,77,110,31,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46,24,79,79,60,60,46,60,60,46,46,46,46,25,25,60,46,46,46,46,46,46,46,46,46,46,46,46,46,25,25,79,31,31,31,28,31,66,66,66,66,66,66,66,66,79,79,79,70,77,77,70,70,110,82,130,130,110,92,69]});var G={};W(G,{badgen:()=>E,calcWidth:()=>o});module.exports=j(G);var z=V(),I=t=>{let e=t[64];return([...i])=>{let n=0,g=0,r=i.length;for(;r--;)g=t[i[r].charCodeAt()],n+=g===void 0?e:g;return n}},o=I(z);var c={green:"3C1",blue:"08C",red:"E43",yellow:"DB1",orange:"F73",purple:"94E",pink:"E5B",grey:"999",gray:"999",cyan:"1BC",black:"2A2A2A"};function E({label:t,subject:e,status:i,color:n="blue",style:g,icon:r,iconWidth:a=13,labelColor:s="555",scale:$=1}){if(B(typeof i=="string","<status> must be string"),t=t===void 0?e:t,!t&&!r)return O({status:i,color:n,style:g,scale:$});n=c[n]||n,s=c[s]||s,a=a*10;let k=r?t!=null&&t.length?a+30:a-18:0,p=r?k+50:50,d=t?o(t):0,l=o(i),h=d+100+k,m=l+100,x=h+m,v=r?' xmlns:xlink="http://www.w3.org/1999/xlink"':"",b=y(5),L=y(5);t=t?f(t):"",i=f(i),n=f(n),s=f(s),r=r&&f(r);let w=R({label:t,status:i});return g==="flat"?`<svg width="${$*x/10}" height="${$*20}" viewBox="0 0 ${x} 200" xmlns="http://www.w3.org/2000/svg"${v} role="img" aria-label="${w}">
+  <title>${w}</title>
   <g>
-    <rect fill="#${f}" width="${a}" height="200"/>
-    <rect fill="#${r}" x="${a}" width="${w}" height="200"/>
+    <rect fill="#${s}" width="${h}" height="200"/>
+    <rect fill="#${n}" x="${h}" width="${m}" height="200"/>
   </g>
   <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
-    <text x="${c+10}" y="148" textLength="${o}" fill="#000" opacity="0.1">${t}</text>
-    <text x="${c}" y="138" textLength="${o}">${t}</text>
-    <text x="${a+55}" y="148" textLength="${$}" fill="#000" opacity="0.1">${i}</text>
-    <text x="${a+45}" y="138" textLength="${$}">${i}</text>
+    <text x="${p+10}" y="148" textLength="${d}" fill="#000" opacity="0.1">${t}</text>
+    <text x="${p}" y="138" textLength="${d}">${t}</text>
+    <text x="${h+55}" y="148" textLength="${l}" fill="#000" opacity="0.1">${i}</text>
+    <text x="${h+45}" y="138" textLength="${l}">${i}</text>
   </g>
-  ${n?`<image x="40" y="35" width="${h}" height="132" xlink:href="${n}"/>`:""}
-</svg>`:`<svg width="${l*s/10}" height="${l*20}" viewBox="0 0 ${s} 200" xmlns="http://www.w3.org/2000/svg"${u} role="img" aria-label="${p}">
-  <title>${p}</title>
-  <linearGradient id="a" x2="0" y2="100%">
+  ${r?`<image x="40" y="35" width="${a}" height="132" xlink:href="${r}"/>`:""}
+</svg>`:`<svg width="${$*x/10}" height="${$*20}" viewBox="0 0 ${x} 200" xmlns="http://www.w3.org/2000/svg"${v} role="img" aria-label="${w}">
+  <title>${w}</title>
+  <linearGradient id="${b}" x2="0" y2="100%">
     <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
     <stop offset="1" stop-opacity=".1"/>
   </linearGradient>
-  <mask id="m"><rect width="${s}" height="200" rx="30" fill="#FFF"/></mask>
-  <g mask="url(#m)">
-    <rect width="${a}" height="200" fill="#${f}"/>
-    <rect width="${w}" height="200" fill="#${r}" x="${a}"/>
-    <rect width="${s}" height="200" fill="url(#a)"/>
+  <mask id="${L}"><rect width="${x}" height="200" rx="30" fill="#FFF"/></mask>
+  <g mask="url(#${L})">
+    <rect width="${h}" height="200" fill="#${s}"/>
+    <rect width="${m}" height="200" fill="#${n}" x="${h}"/>
+    <rect width="${x}" height="200" fill="url(#${b})"/>
   </g>
   <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
-    <text x="${c+10}" y="148" textLength="${o}" fill="#000" opacity="0.25">${t}</text>
-    <text x="${c}" y="138" textLength="${o}">${t}</text>
-    <text x="${a+55}" y="148" textLength="${$}" fill="#000" opacity="0.25">${i}</text>
-    <text x="${a+45}" y="138" textLength="${$}">${i}</text>
+    <text x="${p+10}" y="148" textLength="${d}" fill="#000" opacity="0.25">${t}</text>
+    <text x="${p}" y="138" textLength="${d}">${t}</text>
+    <text x="${h+55}" y="148" textLength="${l}" fill="#000" opacity="0.25">${i}</text>
+    <text x="${h+45}" y="138" textLength="${l}">${i}</text>
   </g>
-  ${n?`<image x="40" y="35" width="${h}" height="130" xlink:href="${n}"/>`:""}
-</svg>`}function W({status:t,color:e,style:i,scale:r}){L(typeof t=="string","<status> must be string"),e=d[e]||e||d.blue;let g=x(t),n=g+115;return t=y(t),i==="flat"?`<svg width="${r*n/10}" height="${r*20}" viewBox="0 0 ${n} 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${t}">
+  ${r?`<image x="40" y="35" width="${a}" height="130" xlink:href="${r}"/>`:""}
+</svg>`}function O({status:t,color:e="blue",style:i,scale:n=1}){B(typeof t=="string","<status> must be string"),e=c[e]||e||c.blue;let g=o(t),r=g+115,a=y(5),s=y(5);return t=f(t),e=f(e),i==="flat"?`<svg width="${n*r/10}" height="${n*20}" viewBox="0 0 ${r} 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${t}">
   <title>${t}</title>
   <g>
-    <rect fill="#${e}" x="0" width="${n}" height="200"/>
+    <rect fill="#${e}" x="0" width="${r}" height="200"/>
   </g>
   <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
     <text x="65" y="148" textLength="${g}" fill="#000" opacity="0.1">${t}</text>
     <text x="55" y="138" textLength="${g}">${t}</text>
   </g>
-</svg>`:`<svg width="${r*n/10}" height="${r*20}" viewBox="0 0 ${n} 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${t}">
+</svg>`:`<svg width="${n*r/10}" height="${n*20}" viewBox="0 0 ${r} 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${t}">
   <title>${t}</title>
-  <linearGradient id="a" x2="0" y2="100%">
+  <linearGradient id="${a}" x2="0" y2="100%">
     <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
     <stop offset="1" stop-opacity=".1"/>
   </linearGradient>
-  <mask id="m"><rect width="${n}" height="200" rx="30" fill="#FFF"/></mask>
-  <g mask="url(#m)">
-    <rect width="${n}" height="200" fill="#${e}" x="0"/>
-    <rect width="${n}" height="200" fill="url(#a)"/>
+  <mask id="${s}"><rect width="${r}" height="200" rx="30" fill="#FFF"/></mask>
+  <g mask="url(#${s})">
+    <rect width="${r}" height="200" fill="#${e}" x="0"/>
+    <rect width="${r}" height="200" fill="url(#${a})"/>
   </g>
   <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
     <text x="65" y="148" textLength="${g}" fill="#000" opacity="0.25">${t}</text>
     <text x="55" y="138" textLength="${g}">${t}</text>
   </g>
-</svg>`}function y(t){return t.replace(/\u0026/g,"&amp;").replace(/\u003C/g,"&lt;").replace(/\u003E/g,"&gt;").replace(/\u0022/g,"&quot;").replace(/\u0027/g,"&apos;")}function j({label:t,status:e}){let i=t?`${t}: `:"";return i+e}function L(t,e){if(!t)throw new TypeError(e)}typeof window=="object"&&(window.badgen=V);
+</svg>`}function f(t){return t.replace(/\u0026/g,"&amp;").replace(/\u003C/g,"&lt;").replace(/\u003E/g,"&gt;").replace(/\u0022/g,"&quot;").replace(/\u0027/g,"&apos;")}function y(t){let e="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",i="";for(let n=0;n<t;n++)i+=e.charAt(Math.floor(Math.random()*e.length));return i}function R({label:t,status:e}){return(t?`${t}: `:"")+e}function B(t,e){if(!t)throw new TypeError(e)}typeof window=="object"&&(window.badgen=E);0&&(0);
 //# sourceMappingURL=index.js.map
 
 
@@ -5237,63 +5307,67 @@ var v=Object.defineProperty,E=t=>v(t,"__esModule",{value:!0}),B=(t,e)=>()=>(e||(
 /***/ 3682:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var register = __nccwpck_require__(4670)
-var addHook = __nccwpck_require__(5549)
-var removeHook = __nccwpck_require__(6819)
+var register = __nccwpck_require__(4670);
+var addHook = __nccwpck_require__(5549);
+var removeHook = __nccwpck_require__(6819);
 
 // bind with array of arguments: https://stackoverflow.com/a/21792913
-var bind = Function.bind
-var bindable = bind.bind(bind)
+var bind = Function.bind;
+var bindable = bind.bind(bind);
 
-function bindApi (hook, state, name) {
-  var removeHookRef = bindable(removeHook, null).apply(null, name ? [state, name] : [state])
-  hook.api = { remove: removeHookRef }
-  hook.remove = removeHookRef
-
-  ;['before', 'error', 'after', 'wrap'].forEach(function (kind) {
-    var args = name ? [state, kind, name] : [state, kind]
-    hook[kind] = hook.api[kind] = bindable(addHook, null).apply(null, args)
-  })
+function bindApi(hook, state, name) {
+  var removeHookRef = bindable(removeHook, null).apply(
+    null,
+    name ? [state, name] : [state]
+  );
+  hook.api = { remove: removeHookRef };
+  hook.remove = removeHookRef;
+  ["before", "error", "after", "wrap"].forEach(function (kind) {
+    var args = name ? [state, kind, name] : [state, kind];
+    hook[kind] = hook.api[kind] = bindable(addHook, null).apply(null, args);
+  });
 }
 
-function HookSingular () {
-  var singularHookName = 'h'
+function HookSingular() {
+  var singularHookName = "h";
   var singularHookState = {
-    registry: {}
-  }
-  var singularHook = register.bind(null, singularHookState, singularHookName)
-  bindApi(singularHook, singularHookState, singularHookName)
-  return singularHook
+    registry: {},
+  };
+  var singularHook = register.bind(null, singularHookState, singularHookName);
+  bindApi(singularHook, singularHookState, singularHookName);
+  return singularHook;
 }
 
-function HookCollection () {
+function HookCollection() {
   var state = {
-    registry: {}
-  }
+    registry: {},
+  };
 
-  var hook = register.bind(null, state)
-  bindApi(hook, state)
+  var hook = register.bind(null, state);
+  bindApi(hook, state);
 
-  return hook
+  return hook;
 }
 
-var collectionHookDeprecationMessageDisplayed = false
-function Hook () {
+var collectionHookDeprecationMessageDisplayed = false;
+function Hook() {
   if (!collectionHookDeprecationMessageDisplayed) {
-    console.warn('[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4')
-    collectionHookDeprecationMessageDisplayed = true
+    console.warn(
+      '[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4'
+    );
+    collectionHookDeprecationMessageDisplayed = true;
   }
-  return HookCollection()
+  return HookCollection();
 }
 
-Hook.Singular = HookSingular.bind()
-Hook.Collection = HookCollection.bind()
+Hook.Singular = HookSingular.bind();
+Hook.Collection = HookCollection.bind();
 
-module.exports = Hook
+module.exports = Hook;
 // expose constructors as a named property for TypeScript
-module.exports.Hook = Hook
-module.exports.Singular = Hook.Singular
-module.exports.Collection = Hook.Collection
+module.exports.Hook = Hook;
+module.exports.Singular = Hook.Singular;
+module.exports.Collection = Hook.Collection;
 
 
 /***/ }),
@@ -7467,10 +7541,6 @@ function getNodeRequestOptions(request) {
 		agent = agent(parsedURL);
 	}
 
-	if (!headers.has('Connection') && !agent) {
-		headers.set('Connection', 'close');
-	}
-
 	// HTTP-network fetch step 4.2
 	// chunked encoding is handled by Node.js
 
@@ -7507,9 +7577,31 @@ AbortError.prototype = Object.create(Error.prototype);
 AbortError.prototype.constructor = AbortError;
 AbortError.prototype.name = 'AbortError';
 
+const URL$1 = Url.URL || whatwgUrl.URL;
+
 // fix an issue where "PassThrough", "resolve" aren't a named export for node <10
 const PassThrough$1 = Stream.PassThrough;
-const resolve_url = Url.resolve;
+
+const isDomainOrSubdomain = function isDomainOrSubdomain(destination, original) {
+	const orig = new URL$1(original).hostname;
+	const dest = new URL$1(destination).hostname;
+
+	return orig === dest || orig[orig.length - dest.length - 1] === '.' && orig.endsWith(dest);
+};
+
+/**
+ * isSameProtocol reports whether the two provided URLs use the same protocol.
+ *
+ * Both domains must already be in canonical form.
+ * @param {string|URL} original
+ * @param {string|URL} destination
+ */
+const isSameProtocol = function isSameProtocol(destination, original) {
+	const orig = new URL$1(original).protocol;
+	const dest = new URL$1(destination).protocol;
+
+	return orig === dest;
+};
 
 /**
  * Fetch function
@@ -7542,7 +7634,7 @@ function fetch(url, opts) {
 			let error = new AbortError('The user aborted a request.');
 			reject(error);
 			if (request.body && request.body instanceof Stream.Readable) {
-				request.body.destroy(error);
+				destroyStream(request.body, error);
 			}
 			if (!response || !response.body) return;
 			response.body.emit('error', error);
@@ -7583,8 +7675,42 @@ function fetch(url, opts) {
 
 		req.on('error', function (err) {
 			reject(new FetchError(`request to ${request.url} failed, reason: ${err.message}`, 'system', err));
+
+			if (response && response.body) {
+				destroyStream(response.body, err);
+			}
+
 			finalize();
 		});
+
+		fixResponseChunkedTransferBadEnding(req, function (err) {
+			if (signal && signal.aborted) {
+				return;
+			}
+
+			if (response && response.body) {
+				destroyStream(response.body, err);
+			}
+		});
+
+		/* c8 ignore next 18 */
+		if (parseInt(process.version.substring(1)) < 14) {
+			// Before Node.js 14, pipeline() does not fully support async iterators and does not always
+			// properly handle when the socket close/end events are out of order.
+			req.on('socket', function (s) {
+				s.addListener('close', function (hadError) {
+					// if a data listener is still present we didn't end cleanly
+					const hasDataListener = s.listenerCount('data') > 0;
+
+					// if end happened before close but the socket didn't emit an error, do it now
+					if (response && hasDataListener && !hadError && !(signal && signal.aborted)) {
+						const err = new Error('Premature close');
+						err.code = 'ERR_STREAM_PREMATURE_CLOSE';
+						response.body.emit('error', err);
+					}
+				});
+			});
+		}
 
 		req.on('response', function (res) {
 			clearTimeout(reqTimeout);
@@ -7597,7 +7723,19 @@ function fetch(url, opts) {
 				const location = headers.get('Location');
 
 				// HTTP fetch step 5.3
-				const locationURL = location === null ? null : resolve_url(request.url, location);
+				let locationURL = null;
+				try {
+					locationURL = location === null ? null : new URL$1(location, request.url).toString();
+				} catch (err) {
+					// error here can only be invalid URL in Location: header
+					// do not throw when options.redirect == manual
+					// let the user extract the errorneous redirect URL
+					if (request.redirect !== 'manual') {
+						reject(new FetchError(`uri requested responds with an invalid redirect URL: ${location}`, 'invalid-redirect'));
+						finalize();
+						return;
+					}
+				}
 
 				// HTTP fetch step 5.5
 				switch (request.redirect) {
@@ -7644,6 +7782,12 @@ function fetch(url, opts) {
 							timeout: request.timeout,
 							size: request.size
 						};
+
+						if (!isDomainOrSubdomain(request.url, locationURL) || !isSameProtocol(request.url, locationURL)) {
+							for (const name of ['authorization', 'www-authenticate', 'cookie', 'cookie2']) {
+								requestOpts.headers.delete(name);
+							}
+						}
 
 						// HTTP-redirect fetch step 9
 						if (res.statusCode !== 303 && request.body && getTotalBytes(request) === null) {
@@ -7732,6 +7876,13 @@ function fetch(url, opts) {
 					response = new Response(body, response_options);
 					resolve(response);
 				});
+				raw.on('end', function () {
+					// some old IIS servers return zero-length OK deflate responses, so 'data' is never emitted.
+					if (!response) {
+						response = new Response(body, response_options);
+						resolve(response);
+					}
+				});
 				return;
 			}
 
@@ -7751,6 +7902,44 @@ function fetch(url, opts) {
 		writeToStream(req, request);
 	});
 }
+function fixResponseChunkedTransferBadEnding(request, errorCallback) {
+	let socket;
+
+	request.on('socket', function (s) {
+		socket = s;
+	});
+
+	request.on('response', function (response) {
+		const headers = response.headers;
+
+		if (headers['transfer-encoding'] === 'chunked' && !headers['content-length']) {
+			response.once('close', function (hadError) {
+				// tests for socket presence, as in some situations the
+				// the 'socket' event is not triggered for the request
+				// (happens in deno), avoids `TypeError`
+				// if a data listener is still present we didn't end cleanly
+				const hasDataListener = socket && socket.listenerCount('data') > 0;
+
+				if (hasDataListener && !hadError) {
+					const err = new Error('Premature close');
+					err.code = 'ERR_STREAM_PREMATURE_CLOSE';
+					errorCallback(err);
+				}
+			});
+		}
+	});
+}
+
+function destroyStream(stream, err) {
+	if (stream.destroy) {
+		stream.destroy(err);
+	} else {
+		// node < 8
+		stream.emit('error', err);
+		stream.end();
+	}
+}
+
 /**
  * Redirect code matching
  *
@@ -7771,6 +7960,7 @@ exports.Headers = Headers;
 exports.Request = Request;
 exports.Response = Response;
 exports.FetchError = FetchError;
+exports.AbortError = AbortError;
 
 
 /***/ }),
@@ -8396,7 +8586,7 @@ function getUserAgent() {
     return navigator.userAgent;
   }
 
-  if (typeof process === "object" && "version" in process) {
+  if (typeof process === "object" && process.version !== undefined) {
     return `Node.js/${process.version.substr(1)} (${process.platform}; ${process.arch})`;
   }
 
@@ -10427,6 +10617,7 @@ const csv = __nccwpck_require__(5149)
 const report = async(files, threshold,badgePath) => {
     const moduleCoverage  = await filterReport(files)
     const overAllCoverageVal = await overallCoverage(moduleCoverage)
+    setOutputVariables(overAllCoverageVal);
     
     const issue_number = github.context.issue.number
 
@@ -10575,8 +10766,14 @@ const parseFile = async(file) => {
     return await promise
 }
 
-module.exports = report
+const setOutputVariables = overAllCoverageVal => {
+    core.setOutput('total-coverage', overAllCoverageVal.line_percent.toFixed(2));
+    core.setOutput('lines-covered', overAllCoverageVal.line_covered);
+    core.setOutput('lines-missed', overAllCoverageVal.line_missed);
+    core.setOutput('total-lines', overAllCoverageVal.line_total);
+}
 
+module.exports = report;
 
 /***/ }),
 
