@@ -10680,26 +10680,31 @@ const markdownTable = async(moduleCoverage, overAllCoverage, threshold) => {
     const branchCoverage = parseFloat(overAllCoverage['branch_percent']).toFixed(2)
     const metrics = [
         '**Total**',
-        `**${lineCoverage}**`,
+        `**${lineCoverage}%**`,
         `**${overAllCoverage['line_covered']} / ${overAllCoverage['line_total']}**`,
-        `**${branchCoverage}**`,
+        `**${branchCoverage}%**`,
         `**${overAllCoverage['branch_covered']} / ${overAllCoverage['branch_total']}**`
     ]
 
     const coverageList = moduleCoverage.map((module) => {
         return [
           module['component'],
-          parseFloat(module['line_percent']).toFixed(2),
+          `${parseFloat(module['line_percent']).toFixed(2)}%`,
           `${module['line_covered']} / ${module['line_total']}`,
-        parseFloat(module['branch_percent']).toFixed(2),
+        `${parseFloat(module['branch_percent']).toFixed(2)}%`,
           `${module['branch_covered']} / ${module['branch_total']}`
         ]
     })
 
     const tableText = table([header, ...coverageList, metrics])
-    const headerText = "### Jacoco Coverage :rocket:"
+    const headerText = "## :rocket: Coverage Report "
     const divider = "---"
-    const reportLink = "\n*[View full coverage report]()*"
+    let reportLink = null
+    if (core.getInput("report-url") == undefined || core.getInput("report-url") == "") {
+        reportLink = "*Coverage report not available*";
+    } else {
+        reportLink = `*[View full coverage report](${core.getInput("min-coverage")})*`
+    }
     let failedText = null
     if (lineCoverage < threshold) {
         failedText = `:x: Coverage of ${lineCoverage} is below passing threshold of ${threshold}`
