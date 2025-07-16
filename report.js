@@ -98,7 +98,7 @@ const markdownTable = async(moduleCoverage, overAllCoverage, threshold) => {
     if (core.getInput("report-url") == undefined || core.getInput("report-url") == "") {
         reportLink = "*Coverage report not available*";
     } else {
-        reportLink = `*[View full coverage report](${core.getInput("min-coverage")})*`
+        reportLink = `*[View full coverage report](${core.getInput("report-url")})*`
     }
     let failedText = null
     if (lineCoverage < threshold) {
