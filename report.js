@@ -72,7 +72,7 @@ const markdownTable = async(moduleCoverage, overAllCoverage, threshold) => {
     ]
     
     const lineCoverage = parseFloat(overAllCoverage['line_percent']).toFixed(2)
-    const branchCoverage = parseFloat(overAllCoverage['line_percent']).toFixed(2)
+    const branchCoverage = parseFloat(overAllCoverage['branch_percent']).toFixed(2)
     const metrics = [
         '**Total**',
         `**${lineCoverage}**`,
@@ -142,15 +142,17 @@ const filterReport = async(files) => {
                 let line_covered = value['line_covered']
                 let line_missed  = value['line_missed']
                 let line_total   = line_covered + line_missed
+                let line_percent = parseFloat(line_covered) /  parseFloat(line_total) * 100.0
 
                 let branch_covered = value['branch_covered']
                 let branch_missed  = value['branch_missed']
                 let branch_total   = branch_covered + branch_missed
-                // let line_percent = parseFloat(line_covered) /  parseFloat(line_total) * 100.0
+                let branch_percent = parseFloat(branch_covered) /  parseFloat(branch_total) * 100.0
                 output.push({
                     'component': key, 
-                    // 'line_percent': line_percent,
+                    'line_percent': line_percent,
                     'line_total': line_total,
+                    'branch_percent': branch_percent,
                     'branch_total': branch_total,
                     ...value
                 })
@@ -178,7 +180,7 @@ const parseFile = async(file) => {
                         group = groups.pop()
                     }
                     if (data[group] == undefined) {
-                        data[group] = {'line_covered': 0, 'line_missed': 0}
+                        data[group] = {'line_covered': 0, 'line_missed': 0, 'branch_covered': 0, 'branch_missed': 0}
                     }
                     data[group]['line_covered'] += parseInt(row.LINE_COVERED)
                     data[group]['line_missed'] += parseInt(row.LINE_MISSED)
