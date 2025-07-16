@@ -76,7 +76,7 @@ const markdownTable = async(moduleCoverage, overAllCoverage, threshold) => {
     const metrics = [
         '**Total**',
         `**${lineCoverage}**`,
-        `**${overAllCoverage['line_covered']} / ${overAllCoverage['line_total']}**`
+        `**${overAllCoverage['line_covered']} / ${overAllCoverage['line_total']}**`,
         `**${branchCoverage}**`,
         `**${overAllCoverage['branch_covered']} / ${overAllCoverage['branch_total']}**`
     ]
