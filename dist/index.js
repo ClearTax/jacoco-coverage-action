@@ -10670,32 +10670,41 @@ const checkCoverageThreshold = async(overAllCoverage, threshold) => {
 const markdownTable = async(moduleCoverage, overAllCoverage, threshold) => {
     const header = [
         'Category',
-        'Percentage',
-        'Covered / Total'
+        'Lines Coverage',
+        'Lines Covered / Total',
+        'Branches Coverage',
+        'Branches Covered / Total'
     ]
     
-    const percentage = parseFloat(overAllCoverage['line_percent']).toFixed(2)
+    const lineCoverage = parseFloat(overAllCoverage['line_percent']).toFixed(2)
+    const branchCoverage = parseFloat(overAllCoverage['line_percent']).toFixed(2)
     const metrics = [
         '**Total**',
-        `**${percentage}**`,
+        `**${lineCoverage}**`,
         `**${overAllCoverage['line_covered']} / ${overAllCoverage['line_total']}**`
+        `**${branchCoverage}**`,
+        `**${overAllCoverage['branch_covered']} / ${overAllCoverage['branch_total']}**`
     ]
 
     const coverageList = moduleCoverage.map((module) => {
         return [
           module['component'],
-          parseFloat(module['line_percent']).toFixed(3),
-          `${module['line_covered']} / ${module['line_total']}`
+          parseFloat(module['line_percent']).toFixed(2),
+          `${module['line_covered']} / ${module['line_total']}`,
+        parseFloat(module['branch_percent']).toFixed(2),
+          `${module['branch_covered']} / ${module['branch_total']}`
         ]
     })
 
     const tableText = table([header, ...coverageList, metrics])
-    const headerText = "## Jacoco Coverage :rocket:"
+    const headerText = "### Jacoco Coverage :rocket:"
+    const divider = "---"
+    const reportLink = "\n*[View full coverage report]()*"
     let failedText = null
-    if (percentage < threshold) {
-        failedText = `:x: Coverage of ${percentage} is below passing threshold of ${threshold}`
+    if (lineCoverage < threshold) {
+        failedText = `:x: Coverage of ${lineCoverage} is below passing threshold of ${threshold}`
     }
-    const bodyText = [headerText, failedText, tableText].filter(Boolean).join("\n");
+    const bodyText = [headerText, failedText, tableText, divider, reportLink].filter(Boolean).join("\n");
 
     return bodyText;
 
@@ -10703,16 +10712,28 @@ const markdownTable = async(moduleCoverage, overAllCoverage, threshold) => {
 
 const overallCoverage = async(result) => {
     const report = {
-        'report': 'Total', 'line_percent': 0.0,
-        'line_total': 0, 'line_covered': 0, 'line_missed': 0
+        'report': 'Total', 
+        'line_percent': 0.0,
+        'line_total': 0,
+        'line_covered': 0,
+        'line_missed': 0,
+        'branch_percent': 0.0,
+        'branch_total': 0,
+        'branch_covered': 0,
+        'branch_missed': 0
     }
     result.forEach(row => {
         report['line_total'] += row['line_total']
         report['line_covered'] += row['line_covered']
         report['line_missed'] += row['line_missed']
+        report['branch_total'] += row['branch_total']
+        report['branch_covered'] += row['branch_covered']
+        report['branch_missed'] += row['branch_missed']
     })
     report['line_percent'] = 
         parseFloat(report['line_covered']) / parseFloat(report['line_total']) * 100.0
+    report['branch_percent'] = 
+        parseFloat(report['branch_covered']) / parseFloat(report['branch_total']) * 100.0
     return report
 }
 
@@ -10720,15 +10741,22 @@ const filterReport = async(files) => {
     const output = []
     await Promise.all(files.map(async (file) => {
         await parseFile(file).then(result => {
+            // key -> group name
+            // value -> object with line_covered, line_missed, branch_covered, branch_missed
             Object.entries(result).forEach(([key, value]) => {
                 let line_covered = value['line_covered']
                 let line_missed  = value['line_missed']
                 let line_total   = line_covered + line_missed
-                let line_percent = parseFloat(line_covered) /  parseFloat(line_total) * 100.0
+
+                let branch_covered = value['branch_covered']
+                let branch_missed  = value['branch_missed']
+                let branch_total   = branch_covered + branch_missed
+                // let line_percent = parseFloat(line_covered) /  parseFloat(line_total) * 100.0
                 output.push({
                     'component': key, 
-                    'line_percent': line_percent,
+                    // 'line_percent': line_percent,
                     'line_total': line_total,
+                    'branch_total': branch_total,
                     ...value
                 })
             })
@@ -10759,6 +10787,8 @@ const parseFile = async(file) => {
                     }
                     data[group]['line_covered'] += parseInt(row.LINE_COVERED)
                     data[group]['line_missed'] += parseInt(row.LINE_MISSED)
+                    data[group]['branch_covered'] += parseInt(row.BRANCH_COVERED)
+                    data[group]['branch_missed'] += parseInt(row.BRANCH_MISSED)
                 })
                 resolve(data)
             })
