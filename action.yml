@@ -19,6 +19,9 @@ inputs:
   badgePath:
     description: "Path where badge will be generated"
     required: false
+  report-url:
+    description: "URL to the full coverage report"
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
