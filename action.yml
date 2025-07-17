@@ -19,6 +19,19 @@ inputs:
   badgePath:
     description: "Path where badge will be generated"
     required: false
+  report-url:
+    description: "URL to the full coverage report"
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
+
+outputs:
+  total-coverage:
+    description: 'Total code coverage percentage'
+  lines-covered:
+    description: 'Total lines covered by tests'
+  lines-missed:
+    description: 'Total lines missed by tests'
+  total-lines:
+    description: 'Total number of lines'
