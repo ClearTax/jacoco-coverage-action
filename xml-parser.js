@@ -11,8 +11,27 @@ const gitDiff = require('./git-diff');
  */
 async function parseJaCoCoXml(xmlFilePath) {
   try {
+    if (!xmlFilePath || !fs.existsSync(xmlFilePath)) {
+      core.warning(`XML file not found: ${xmlFilePath}`);
+      return null;
+    }
+    
+    core.info(`Parsing XML file: ${xmlFilePath}`);
     const xmlData = fs.readFileSync(xmlFilePath, 'utf8');
-    const result = await parseStringPromise(xmlData, { explicitArray: false });
+    
+    // Check if the file is actually XML
+    if (!xmlData.trim().startsWith('<?xml')) {
+      core.warning(`File does not appear to be XML: ${xmlFilePath}`);
+      return null;
+    }
+    
+    const result = await parseStringPromise(xmlData, {
+      explicitArray: false,
+      mergeAttrs: true,
+      explicitRoot: false
+    });
+    
+    core.info(`Successfully parsed XML file: ${xmlFilePath}`);
     return result;
   } catch (error) {
     core.warning(`Error parsing XML file ${xmlFilePath}: ${error.message}`);
@@ -26,11 +45,20 @@ async function parseJaCoCoXml(xmlFilePath) {
  * @returns {Object} - Extracted coverage data
  */
 function extractCoverageFromXml(parsedXml) {
-  if (!parsedXml || !parsedXml.report) {
+  if (!parsedXml) {
+    core.warning('No parsed XML data provided');
     return null;
   }
 
-  const report = parsedXml.report;
+  // Handle different possible structures of the parsed XML
+  const report = parsedXml.report || parsedXml;
+  
+  if (!report) {
+    core.warning('Could not find report element in XML');
+    return null;
+  }
+  
+  core.info('Extracting coverage data from XML');
   const coverageData = {
     packages: [],
     overall: {
@@ -45,11 +73,17 @@ function extractCoverageFromXml(parsedXml) {
 
   // Process packages
   if (report.package) {
+    // Ensure packages is an array
     const packages = Array.isArray(report.package) ? report.package : [report.package];
+    core.info(`Found ${packages.length} packages in the report`);
     
     packages.forEach(pkg => {
+      // Handle both merged attributes and $ notation
+      const packageName = pkg.name || (pkg.$ ? pkg.$.name : 'unknown');
+      core.info(`Processing package: ${packageName}`);
+      
       const packageData = {
-        name: pkg.$.name,
+        name: packageName,
         classes: [],
         counters: {
           instruction: { covered: 0, missed: 0 },
@@ -64,11 +98,18 @@ function extractCoverageFromXml(parsedXml) {
       // Process classes
       if (pkg.class) {
         const classes = Array.isArray(pkg.class) ? pkg.class : [pkg.class];
+        core.info(`Found ${classes.length} classes in package ${packageName}`);
         
         classes.forEach(cls => {
+          // Handle both merged attributes and $ notation
+          const className = cls.name || (cls.$ ? cls.$.name : 'unknown');
+          const sourceFilePath = cls.sourcefilename || (cls.$ ? cls.$.sourcefilename : 'unknown');
+          
+          core.info(`Processing class: ${className} (${sourceFilePath})`);
+          
           const classData = {
-            name: cls.$.name,
-            sourceFilePath: cls.$.sourcefilename,
+            name: className,
+            sourceFilePath: sourceFilePath,
             methods: [],
             counters: {
               instruction: { covered: 0, missed: 0 },
@@ -84,10 +125,15 @@ function extractCoverageFromXml(parsedXml) {
             const methods = Array.isArray(cls.method) ? cls.method : [cls.method];
             
             methods.forEach(method => {
+              // Handle both merged attributes and $ notation
+              const methodName = method.name || (method.$ ? method.$.name : 'unknown');
+              const methodDesc = method.desc || (method.$ ? method.$.desc : '');
+              const methodLine = method.line || (method.$ ? method.$.line : '0');
+              
               const methodData = {
-                name: method.$.name,
-                signature: method.$.desc,
-                line: parseInt(method.$.line, 10),
+                name: methodName,
+                signature: methodDesc,
+                line: parseInt(methodLine, 10),
                 counters: {
                   instruction: { covered: 0, missed: 0 },
                   line: { covered: 0, missed: 0 },
@@ -101,9 +147,10 @@ function extractCoverageFromXml(parsedXml) {
                 const counters = Array.isArray(method.counter) ? method.counter : [method.counter];
                 
                 counters.forEach(counter => {
-                  const type = counter.$.type;
-                  const covered = parseInt(counter.$.covered, 10);
-                  const missed = parseInt(counter.$.missed, 10);
+                  // Handle both merged attributes and $ notation
+                  const type = counter.type || (counter.$ ? counter.$.type : 'unknown');
+                  const covered = parseInt(counter.covered || (counter.$ ? counter.$.covered : '0'), 10);
+                  const missed = parseInt(counter.missed || (counter.$ ? counter.$.missed : '0'), 10);
                   
                   methodData.counters[type] = { covered, missed };
                   classData.counters[type].covered += covered;
@@ -120,9 +167,10 @@ function extractCoverageFromXml(parsedXml) {
             const counters = Array.isArray(cls.counter) ? cls.counter : [cls.counter];
             
             counters.forEach(counter => {
-              const type = counter.$.type;
-              const covered = parseInt(counter.$.covered, 10);
-              const missed = parseInt(counter.$.missed, 10);
+              // Handle both merged attributes and $ notation
+              const type = counter.type || (counter.$ ? counter.$.type : 'unknown');
+              const covered = parseInt(counter.covered || (counter.$ ? counter.$.covered : '0'), 10);
+              const missed = parseInt(counter.missed || (counter.$ ? counter.$.missed : '0'), 10);
               
               classData.counters[type] = { covered, missed };
               packageData.counters[type].covered += covered;
@@ -139,9 +187,10 @@ function extractCoverageFromXml(parsedXml) {
         const counters = Array.isArray(pkg.counter) ? pkg.counter : [pkg.counter];
         
         counters.forEach(counter => {
-          const type = counter.$.type;
-          const covered = parseInt(counter.$.covered, 10);
-          const missed = parseInt(counter.$.missed, 10);
+          // Handle both merged attributes and $ notation
+          const type = counter.type || (counter.$ ? counter.$.type : 'unknown');
+          const covered = parseInt(counter.covered || (counter.$ ? counter.$.covered : '0'), 10);
+          const missed = parseInt(counter.missed || (counter.$ ? counter.$.missed : '0'), 10);
           
           packageData.counters[type] = { covered, missed };
           coverageData.overall[type].covered += covered;
@@ -161,6 +210,8 @@ function extractCoverageFromXml(parsedXml) {
     
     coverageData.overall[type].total = total;
     coverageData.overall[type].coverage = total > 0 ? (covered / total) * 100 : 0;
+    
+    core.info(`Overall ${type} coverage: ${coverageData.overall[type].coverage.toFixed(2)}% (${covered}/${total})`);
   });
 
   return coverageData;
@@ -292,33 +343,80 @@ function calculateDeltaCoverage(beforeCoverage, afterCoverage) {
  * @returns {Promise<Object>} - Coverage data including delta
  */
 async function processCoverageReports(beforeXmlPath, afterXmlPath) {
+  core.info(`Processing coverage reports - Before: ${beforeXmlPath || 'none'}, After: ${afterXmlPath}`);
+  
   // Parse XML reports
-  const beforeXml = await parseJaCoCoXml(beforeXmlPath);
   const afterXml = await parseJaCoCoXml(afterXmlPath);
-
-  if (!beforeXml || !afterXml) {
-    core.warning('Failed to parse one or both XML reports');
-    return null;
+  
+  if (!afterXml) {
+    core.warning('Failed to parse after XML report');
+    // Create a minimal coverage data object to avoid NaN in the report
+    return {
+      after: {
+        packages: [],
+        overall: {
+          instruction: { covered: 0, missed: 0, total: 0, coverage: 0 },
+          line: { covered: 0, missed: 0, total: 0, coverage: 0 },
+          branch: { covered: 0, missed: 0, total: 0, coverage: 0 },
+          complexity: { covered: 0, missed: 0, total: 0, coverage: 0 },
+          method: { covered: 0, missed: 0, total: 0, coverage: 0 },
+          class: { covered: 0, missed: 0, total: 0, coverage: 0 }
+        }
+      },
+      changedFiles: []
+    };
   }
-
-  // Extract coverage data
-  const beforeCoverage = extractCoverageFromXml(beforeXml);
+  
+  // Extract coverage data for after report
   const afterCoverage = extractCoverageFromXml(afterXml);
-
-  if (!beforeCoverage || !afterCoverage) {
-    core.warning('Failed to extract coverage data from one or both reports');
-    return null;
+  
+  if (!afterCoverage) {
+    core.warning('Failed to extract coverage data from after report');
+    // Create a minimal coverage data object to avoid NaN in the report
+    return {
+      after: {
+        packages: [],
+        overall: {
+          instruction: { covered: 0, missed: 0, total: 0, coverage: 0 },
+          line: { covered: 0, missed: 0, total: 0, coverage: 0 },
+          branch: { covered: 0, missed: 0, total: 0, coverage: 0 },
+          complexity: { covered: 0, missed: 0, total: 0, coverage: 0 },
+          method: { covered: 0, missed: 0, total: 0, coverage: 0 },
+          class: { covered: 0, missed: 0, total: 0, coverage: 0 }
+        }
+      },
+      changedFiles: []
+    };
+  }
+  
+  // If before report is provided, parse it and calculate delta
+  let beforeCoverage = null;
+  let deltaCoverage = null;
+  
+  if (beforeXmlPath) {
+    const beforeXml = await parseJaCoCoXml(beforeXmlPath);
+    if (beforeXml) {
+      beforeCoverage = extractCoverageFromXml(beforeXml);
+    }
   }
 
   // Get changed files from git diff
   const changedFiles = await gitDiff.getChangedFiles();
+  core.info(`Found ${changedFiles.size} changed files from git diff`);
 
   // Filter coverage data based on changed files
-  const filteredBeforeCoverage = filterCoverageByChangedFiles(beforeCoverage, changedFiles);
-  const filteredAfterCoverage = filterCoverageByChangedFiles(afterCoverage, changedFiles);
-
-  // Calculate delta coverage
-  const deltaCoverage = calculateDeltaCoverage(filteredBeforeCoverage, filteredAfterCoverage);
+  let filteredBeforeCoverage = null;
+  let filteredAfterCoverage = null;
+  
+  if (changedFiles.size > 0) {
+    filteredAfterCoverage = filterCoverageByChangedFiles(afterCoverage, changedFiles);
+    
+    if (beforeCoverage) {
+      filteredBeforeCoverage = filterCoverageByChangedFiles(beforeCoverage, changedFiles);
+      // Calculate delta coverage if we have both before and after data
+      deltaCoverage = calculateDeltaCoverage(filteredBeforeCoverage, filteredAfterCoverage);
+    }
+  }
 
   return {
     before: beforeCoverage,
