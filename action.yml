@@ -8,11 +8,22 @@ inputs:
   paths:
     description: "Path to jacoco csv report"
     default: "coverage/coverage.csv"
-    required: true
+    required: false
+  xml-path-before:
+    description: "Path to JaCoCo XML report before changes (for delta coverage calculation)"
+    required: false
+  xml-path-after:
+    description: "Path to JaCoCo XML report after changes (for delta coverage calculation)"
+    default: "target/site/jacoco/jacoco.xml"
+    required: false
+  use-xml:
+    description: "Whether to use XML reports instead of CSV reports"
+    default: "false"
+    required: false
   min-coverage:
     description: "The minimum code coverage that is required to pass for overall project"
     default: "90"
-    required: false  
+    required: false
   token:
     description: "Github PAT to create PR comments"
     required: true
@@ -21,6 +32,17 @@ inputs:
     required: false
   report-url:
     description: "URL to the full coverage report"
+    required: false
+  use-git-diff:
+    description: "Whether to analyze coverage only for files changed in the current PR/commit"
+    default: "false"
+    required: false
+  git-diff-path:
+    description: "Path to a file containing git diff output (if not provided, will use GitHub API to get diff)"
+    required: false
+  base-ref:
+    description: "Base reference for git diff comparison (e.g., 'main')"
+    default: ""
     required: false
 runs:
   using: 'node12'
