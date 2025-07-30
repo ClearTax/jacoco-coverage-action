@@ -11,27 +11,68 @@ const gitDiff = require('./git-diff');
  */
 async function parseJaCoCoXml(xmlFilePath) {
   try {
-    if (!xmlFilePath || !fs.existsSync(xmlFilePath)) {
-      core.warning(`XML file not found: ${xmlFilePath}`);
+    if (!xmlFilePath) {
+      core.warning(`No XML file path provided`);
+      return null;
+    }
+    
+    // Check if file exists with full path details
+    try {
+      const fullPath = path.resolve(xmlFilePath);
+      core.info(`Checking XML file at full path: ${fullPath}`);
+      
+      if (!fs.existsSync(xmlFilePath)) {
+        core.warning(`XML file not found: ${xmlFilePath}`);
+        // List directory contents to help debug
+        try {
+          const dirPath = path.dirname(xmlFilePath);
+          core.info(`Listing contents of directory: ${dirPath}`);
+          const files = fs.readdirSync(dirPath);
+          core.info(`Directory contents: ${JSON.stringify(files)}`);
+        } catch (dirError) {
+          core.warning(`Error listing directory: ${dirError.message}`);
+        }
+        return null;
+      }
+    } catch (pathError) {
+      core.warning(`Error resolving path: ${pathError.message}`);
       return null;
     }
     
     core.info(`Parsing XML file: ${xmlFilePath}`);
     const xmlData = fs.readFileSync(xmlFilePath, 'utf8');
     
-    // Check if the file is actually XML
+    // Check if the file is actually XML and log the first few characters
+    core.info(`First 100 characters of file: ${xmlData.substring(0, 100).replace(/\n/g, ' ')}`);
     if (!xmlData.trim().startsWith('<?xml')) {
       core.warning(`File does not appear to be XML: ${xmlFilePath}`);
       return null;
     }
     
-    const result = await parseStringPromise(xmlData, {
-      explicitArray: false,
-      mergeAttrs: true,
-      explicitRoot: false
-    });
-    
-    core.info(`Successfully parsed XML file: ${xmlFilePath}`);
+    try {
+      core.info(`Attempting to parse XML with xml2js`);
+      const result = await parseStringPromise(xmlData, {
+        explicitArray: false,
+        mergeAttrs: true,
+        explicitRoot: false
+      });
+      
+      core.info(`Successfully parsed XML file: ${xmlFilePath}`);
+      core.info(`XML structure: ${JSON.stringify(Object.keys(result))}`);
+      
+      // Check if it has the expected structure
+      if (result.report) {
+        core.info(`Found report element with ${result.report.package ?
+          (Array.isArray(result.report.package) ? result.report.package.length : 1) : 0} packages`);
+      } else {
+        core.warning(`XML doesn't have expected 'report' structure`);
+      }
+      
+      return result;
+    } catch (parseError) {
+      core.error(`Error parsing XML: ${parseError.message}`);
+      return null;
+    }
     return result;
   } catch (error) {
     core.warning(`Error parsing XML file ${xmlFilePath}: ${error.message}`);
@@ -346,10 +387,11 @@ async function processCoverageReports(beforeXmlPath, afterXmlPath) {
   core.info(`Processing coverage reports - Before: ${beforeXmlPath || 'none'}, After: ${afterXmlPath}`);
   
   // Parse XML reports
+  core.info(`Attempting to parse after XML report: ${afterXmlPath}`);
   const afterXml = await parseJaCoCoXml(afterXmlPath);
   
   if (!afterXml) {
-    core.warning('Failed to parse after XML report');
+    core.error('Failed to parse after XML report - returning empty coverage data');
     // Create a minimal coverage data object to avoid NaN in the report
     return {
       after: {
@@ -368,10 +410,11 @@ async function processCoverageReports(beforeXmlPath, afterXmlPath) {
   }
   
   // Extract coverage data for after report
+  core.info('Extracting coverage data from after XML');
   const afterCoverage = extractCoverageFromXml(afterXml);
   
   if (!afterCoverage) {
-    core.warning('Failed to extract coverage data from after report');
+    core.error('Failed to extract coverage data from after report - returning empty coverage data');
     // Create a minimal coverage data object to avoid NaN in the report
     return {
       after: {
@@ -394,31 +437,57 @@ async function processCoverageReports(beforeXmlPath, afterXmlPath) {
   let deltaCoverage = null;
   
   if (beforeXmlPath) {
+    core.info(`Attempting to parse before XML report: ${beforeXmlPath}`);
     const beforeXml = await parseJaCoCoXml(beforeXmlPath);
     if (beforeXml) {
+      core.info('Extracting coverage data from before XML');
       beforeCoverage = extractCoverageFromXml(beforeXml);
+      if (beforeCoverage) {
+        core.info('Successfully extracted before coverage data');
+      } else {
+        core.warning('Failed to extract before coverage data');
+      }
+    } else {
+      core.warning('Failed to parse before XML report');
     }
+  } else {
+    core.info('No before XML path provided, skipping delta calculation');
   }
 
   // Get changed files from git diff
+  core.info('Getting changed files from git diff');
   const changedFiles = await gitDiff.getChangedFiles();
   core.info(`Found ${changedFiles.size} changed files from git diff`);
+  if (changedFiles.size > 0) {
+    core.info(`Changed files: ${JSON.stringify(Array.from(changedFiles))}`);
+  }
 
   // Filter coverage data based on changed files
   let filteredBeforeCoverage = null;
   let filteredAfterCoverage = null;
   
   if (changedFiles.size > 0) {
+    core.info('Filtering after coverage data based on changed files');
     filteredAfterCoverage = filterCoverageByChangedFiles(afterCoverage, changedFiles);
     
     if (beforeCoverage) {
+      core.info('Filtering before coverage data based on changed files');
       filteredBeforeCoverage = filterCoverageByChangedFiles(beforeCoverage, changedFiles);
+      
       // Calculate delta coverage if we have both before and after data
+      core.info('Calculating delta coverage');
       deltaCoverage = calculateDeltaCoverage(filteredBeforeCoverage, filteredAfterCoverage);
+      if (deltaCoverage) {
+        core.info(`Delta line coverage: ${deltaCoverage.line.delta.toFixed(2)}%`);
+      } else {
+        core.warning('Failed to calculate delta coverage');
+      }
     }
+  } else {
+    core.info('No changed files found, skipping filtered coverage calculation');
   }
 
-  return {
+  const result = {
     before: beforeCoverage,
     after: afterCoverage,
     filteredBefore: filteredBeforeCoverage,
@@ -426,6 +495,19 @@ async function processCoverageReports(beforeXmlPath, afterXmlPath) {
     delta: deltaCoverage,
     changedFiles: Array.from(changedFiles)
   };
+  
+  core.info('Returning coverage data with structure: ' +
+    JSON.stringify({
+      hasBefore: !!result.before,
+      hasAfter: !!result.after,
+      hasFilteredBefore: !!result.filteredBefore,
+      hasFilteredAfter: !!result.filteredAfter,
+      hasDelta: !!result.delta,
+      changedFilesCount: result.changedFiles.length
+    })
+  );
+  
+  return result;
 }
 
 module.exports = {

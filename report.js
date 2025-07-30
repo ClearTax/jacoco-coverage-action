@@ -15,10 +15,31 @@ const csv = require('csv-parser')
  * @param {string} badgePath - Path to save coverage badge
  */
 const generateXmlReport = async(coverageData, threshold, badgePath) => {
+    core.info(`Generating XML report with threshold: ${threshold}`);
+    core.info(`Coverage data structure: ${JSON.stringify({
+        hasBefore: !!coverageData.before,
+        hasAfter: !!coverageData.after,
+        hasFilteredBefore: !!coverageData.filteredBefore,
+        hasFilteredAfter: !!coverageData.filteredAfter,
+        hasDelta: !!coverageData.delta,
+        changedFilesCount: coverageData.changedFiles ? coverageData.changedFiles.length : 0
+    })}`);
+    
+    // Validate coverage data
+    if (!coverageData.after || !coverageData.after.overall) {
+        core.error('Invalid coverage data: missing after.overall');
+        core.info(`Full coverage data: ${JSON.stringify(coverageData)}`);
+        throw new Error('Invalid coverage data structure');
+    }
+    
     // Extract overall coverage values
     const afterCoverage = coverageData.after.overall;
+    core.info(`After coverage: ${JSON.stringify(afterCoverage)}`);
+    
     const lineCoverage = afterCoverage.line.coverage;
     const branchCoverage = afterCoverage.branch.coverage;
+    
+    core.info(`Line coverage: ${lineCoverage}, Branch coverage: ${branchCoverage}`);
     
     // Set output variables
     setXmlOutputVariables(afterCoverage);
