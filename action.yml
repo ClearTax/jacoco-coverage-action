@@ -22,6 +22,14 @@ inputs:
   report-url:
     description: "URL to the full coverage report"
     required: false
+  use-diff:
+    description: "Whether to show coverage only for files changed in this PR compared to master/main"
+    default: "true"
+    required: false
+  base-ref:
+    description: "Base branch to compare against for diff (default: master)"
+    default: "master"
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

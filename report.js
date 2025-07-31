@@ -7,17 +7,25 @@ const gradientBadge = require('gradient-badge');
 const github = require('@actions/github')
 const fs = require('fs')
 const csv = require('csv-parser')
+const gitDiff = require('./git_diff')
 
 
-const report = async(files, threshold,badgePath) => {
+const report = async(files, threshold, badgePath, useDiff = false, changedFiles = []) => {
     const moduleCoverage  = await filterReport(files)
     const overAllCoverageVal = await overallCoverage(moduleCoverage)
     setOutputVariables(overAllCoverageVal);
     
     const issue_number = github.context.issue.number
 
+    let diffCoverage = null;
+    let diffCoverageVal = null;
+    if (useDiff && changedFiles.length > 0) {
+        diffCoverage = gitDiff.filterCoverageByChangedFiles(moduleCoverage, changedFiles);
+        diffCoverageVal = await overallCoverage(diffCoverage);
+    }
+
     if (issue_number) {
-        let bodyText = await markdownTable(moduleCoverage, overAllCoverageVal, threshold)
+        let bodyText = await markdownTable(moduleCoverage, overAllCoverageVal, threshold, useDiff, diffCoverage, diffCoverageVal)
         core.info(bodyText)
         core.info(issue_number)
         core.info(github.context.repo.repo)
@@ -62,7 +70,7 @@ const checkCoverageThreshold = async(overAllCoverage, threshold) => {
     return true
 }
 
-const markdownTable = async(moduleCoverage, overAllCoverage, threshold) => {
+const markdownTable = async(moduleCoverage, overAllCoverage, threshold, useDiff = false, diffCoverage = null, diffCoverageVal = null) => {
     const header = [
         'Category',
         'Lines Coverage',
@@ -92,6 +100,41 @@ const markdownTable = async(moduleCoverage, overAllCoverage, threshold) => {
     })
 
     const tableText = table([header, ...coverageList, metrics])
+    let diffTableText = '';
+    if (useDiff && diffCoverage && diffCoverage.length > 0) {
+        const diffHeader = [
+            'Changed File',
+            'Lines Coverage',
+            'Lines Covered / Total',
+            'Branches Coverage',
+            'Branches Covered / Total'
+        ]
+        
+        const diffLineCoverage = parseFloat(diffCoverageVal['line_percent']).toFixed(2)
+        const diffBranchCoverage = parseFloat(diffCoverageVal['branch_percent']).toFixed(2)
+        const diffMetrics = [
+            '**Changed Files Total**',
+            `**${diffLineCoverage}%**`,
+            `**${diffCoverageVal['line_covered']} / ${diffCoverageVal['line_total']}**`,
+            `**${diffBranchCoverage}%**`,
+            `**${diffCoverageVal['branch_covered']} / ${diffCoverageVal['branch_total']}**`
+        ]
+
+        const diffCoverageList = diffCoverage.map((module) => {
+            return [
+              module['component'],
+              `${parseFloat(module['line_percent']).toFixed(2)}%`,
+              `${module['line_covered']} / ${module['line_total']}`,
+              `${parseFloat(module['branch_percent']).toFixed(2)}%`,
+              `${module['branch_covered']} / ${module['branch_total']}`
+            ]
+        })
+
+        diffTableText = "\n\n### Coverage for Changed Files\n\n" + 
+                        table([diffHeader, ...diffCoverageList, diffMetrics]);
+    }
+    
+    // Add the diff table to the body text
     const headerText = "## :rocket: Coverage Report "
     const divider = "---"
     let reportLink = null
@@ -104,7 +147,9 @@ const markdownTable = async(moduleCoverage, overAllCoverage, threshold) => {
     if (lineCoverage < threshold) {
         failedText = `:x: Coverage of ${lineCoverage} is below passing threshold of ${threshold}`
     }
-    const bodyText = [headerText, failedText, tableText, divider, reportLink].filter(Boolean).join("\n");
+    
+    // Include the diff table in the body text
+    const bodyText = [headerText, failedText, tableText, diffTableText, divider, reportLink].filter(Boolean).join("\n");
 
     return bodyText;
 

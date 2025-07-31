@@ -15,7 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Generate jacoco report 
+        with:
+          fetch-depth: 0  # Required for git diff to work properly
+      
+      - name: Generate jacoco report
         run: mvn clean test verify
 
       - name: Check code coverage
@@ -24,6 +27,8 @@ jobs:
           paths: reports/target/site/jacoco-aggregate/jacoco.csv
           min-coverage: 90
           token: ${{ secrets.GITHUB_TOKEN }}
+          use-diff: true
+          base-ref: main  # Use 'main' instead of 'master' if that's your default branch
 ```
 
 ### Inputs
@@ -32,8 +37,10 @@ jobs:
 |--|--|-- |--|
 | paths | true  | comma separated paths of the generated jacoco csv files. | null |
 | min-coverage | false | The minimum coverage required to pass the PR | 90 |
-| token | true | Github personal acess token to add comments to Pull Request | null
-| report-url | false | URL path to the coverage report. This will be added in the PR comment | null
+| token | true | Github personal acess token to add comments to Pull Request | null |
+| report-url | false | URL path to the coverage report. This will be added in the PR comment | null |
+| use-diff | false | Whether to show coverage only for files changed in this PR compared to master/main | true |
+| base-ref | false | Base branch to compare against for diff | master |
 ### Outputs
 
 | Name | Description |
