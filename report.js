@@ -11,6 +11,7 @@ const gitDiff = require('./git_diff')
 
 
 const report = async(files, threshold, badgePath, useDiff = false, changedFiles = []) => {
+    // Debug input parameter
     const moduleCoverage  = await filterReport(files)
     const overAllCoverageVal = await overallCoverage(moduleCoverage)
     setOutputVariables(overAllCoverageVal);
@@ -20,13 +21,36 @@ const report = async(files, threshold, badgePath, useDiff = false, changedFiles 
     let diffCoverage = null;
     let diffCoverageVal = null;
     if (useDiff && changedFiles.length > 0) {
+        core.info('=== DEBUG: Filtering coverage for changed files ===');
+        core.info(`Module coverage count before filtering: ${moduleCoverage.length}`);
+        core.info(`Changed files count: ${changedFiles.length}`);
+        
         diffCoverage = gitDiff.filterCoverageByChangedFiles(moduleCoverage, changedFiles);
+        
+        core.info(`Filtered coverage count: ${diffCoverage.length}`);
+        if (diffCoverage.length > 0) {
+            core.info(`First filtered component: ${JSON.stringify(diffCoverage[0])}`);
+        } else {
+            core.warning('WARNING: No coverage data matched with changed files');
+        }
+        
         diffCoverageVal = await overallCoverage(diffCoverage);
+        core.info(`Diff coverage percentage: ${diffCoverageVal.line_percent.toFixed(2)}%`);
     }
 
     if (issue_number) {
         let bodyText = await markdownTable(moduleCoverage, overAllCoverageVal, threshold, useDiff, diffCoverage, diffCoverageVal)
         core.info(bodyText)
+        core.info('=== DEBUG: Report Function Parameters ===');
+        core.info(`Files: ${JSON.stringify(files)}`);
+        core.info(`Threshold: ${threshold}`);
+        core.info(`Badge Path: ${badgePath}`);
+        core.info(`Use Diff: ${useDiff}`);
+        core.info(`Changed Files Count: ${changedFiles.length}`);
+        if (changedFiles.length > 0) {
+            core.info(`First few changed files: ${JSON.stringify(changedFiles.slice(0, 5))}`);
+        }
+    
         core.info(issue_number)
         core.info(github.context.repo.repo)
         core.info(github.context.repo.owner)
@@ -71,6 +95,12 @@ const checkCoverageThreshold = async(overAllCoverage, threshold) => {
 }
 
 const markdownTable = async(moduleCoverage, overAllCoverage, threshold, useDiff = false, diffCoverage = null, diffCoverageVal = null) => {
+    // Debug parameters
+    core.info('=== DEBUG: Markdown Table Function Parameters ===');
+    core.info(`Use Diff: ${useDiff}`);
+    core.info(`Has Diff Coverage: ${diffCoverage !== null}`);
+    core.info(`Diff Coverage Length: ${diffCoverage ? diffCoverage.length : 0}`);
+    
     const header = [
         'Category',
         'Lines Coverage',
@@ -102,6 +132,8 @@ const markdownTable = async(moduleCoverage, overAllCoverage, threshold, useDiff 
     const tableText = table([header, ...coverageList, metrics])
     let diffTableText = '';
     if (useDiff && diffCoverage && diffCoverage.length > 0) {
+        core.info('=== DEBUG: Generating diff coverage table ===');
+        
         const diffHeader = [
             'Changed File',
             'Lines Coverage',
@@ -130,8 +162,15 @@ const markdownTable = async(moduleCoverage, overAllCoverage, threshold, useDiff 
             ]
         })
 
-        diffTableText = "\n\n### Coverage for Changed Files\n\n" + 
+        diffTableText = "\n\n### Coverage for Changed Files\n\n" +
                         table([diffHeader, ...diffCoverageList, diffMetrics]);
+        
+        core.info(`Generated diff table with ${diffCoverage.length} components`);
+    } else {
+        core.info('=== DEBUG: Skipping diff coverage table ===');
+        core.info(`useDiff: ${useDiff}`);
+        core.info(`diffCoverage exists: ${diffCoverage !== null}`);
+        core.info(`diffCoverage length: ${diffCoverage ? diffCoverage.length : 0}`);
     }
     
     // Add the diff table to the body text
