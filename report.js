@@ -44,10 +44,13 @@ const report = async(files, threshold, badgePath) => {
         })
     }
     
-    // Create badge for overall coverage
+    // Create badge for overall coverage - handle potential NaN values
+    const coverageValue = !isNaN(overAllCoverageVal['line_percent'])
+        ? overAllCoverageVal['line_percent'].toFixed(2)
+        : '0.00';
     const svgString = gradientBadge({
         subject: 'Coverage',
-        status: String(overAllCoverageVal['line_percent'].toFixed(2)),
+        status: String(coverageValue),
         style: 'flat',
         gradient: ['00f2ff', '3cfa3f'],
     });
@@ -62,11 +65,14 @@ const report = async(files, threshold, badgePath) => {
     }
     core.info(svgString)
 
-    // Create badge for diff coverage if there are changed lines
+    // Create badge for diff coverage if there are changed lines - handle potential NaN values
     if (diffCoverageVal.diff_line_total > 0) {
+        const diffCoverageValue = !isNaN(diffCoverageVal.diff_line_percent)
+            ? diffCoverageVal.diff_line_percent.toFixed(2)
+            : '0.00';
         const diffSvgString = gradientBadge({
             subject: 'Diff Coverage',
-            status: String(diffCoverageVal.diff_line_percent.toFixed(2)),
+            status: String(diffCoverageValue),
             style: 'flat',
             gradient: ['00f2ff', '3cfa3f'],
         });
@@ -84,13 +90,16 @@ const report = async(files, threshold, badgePath) => {
 }
 
 const checkCoverageThreshold = async(overAllCoverage, threshold) => {
-    const percentage = parseFloat(overAllCoverage['line_percent'])
+    // Handle potential NaN values
+    const percentage = !isNaN(overAllCoverage['line_percent'])
+        ? parseFloat(overAllCoverage['line_percent'])
+        : 0;
     threshold = parseFloat(threshold)
     if (percentage < threshold) {
         core.setFailed(`Coverage of ${percentage} is below passing threshold of ${threshold}`)
         return false
     }
-    core.info(`Coverage is above passing threshod - ${percentage}`)
+    core.info(`Coverage is above passing threshold - ${percentage}`)
     return true
 }
 
@@ -103,8 +112,13 @@ const markdownTable = async(moduleCoverage, overAllCoverage, diffCoverage, thres
         'Branches Covered / Total'
     ]
     
-    const lineCoverage = parseFloat(overAllCoverage['line_percent']).toFixed(2)
-    const branchCoverage = parseFloat(overAllCoverage['branch_percent']).toFixed(2)
+    // Ensure we don't get NaN values by defaulting to 0 when necessary
+    const lineCoverage = !isNaN(overAllCoverage['line_percent'])
+        ? parseFloat(overAllCoverage['line_percent']).toFixed(2)
+        : '0.00'
+    const branchCoverage = !isNaN(overAllCoverage['branch_percent'])
+        ? parseFloat(overAllCoverage['branch_percent']).toFixed(2)
+        : '0.00'
     const metrics = [
         '**Total**',
         `**${lineCoverage}%**`,
@@ -155,7 +169,10 @@ const markdownTable = async(moduleCoverage, overAllCoverage, diffCoverage, thres
     // Add line-specific coverage details if available
     let lineSpecificCoverageText = "";
     if (lineSpecificCoverage && lineSpecificCoverage.totalChangedLines > 0) {
-        const lineSpecificPercent = parseFloat(lineSpecificCoverage.coveragePercentage).toFixed(2);
+        // Handle potential NaN values
+        const lineSpecificPercent = !isNaN(lineSpecificCoverage.coveragePercentage)
+            ? parseFloat(lineSpecificCoverage.coveragePercentage).toFixed(2)
+            : '0.00';
         lineSpecificCoverageText = `
         ### 🔍 Line-Specific Coverage Details
         
@@ -170,9 +187,12 @@ const markdownTable = async(moduleCoverage, overAllCoverage, diffCoverage, thres
         `;
         
         for (const [filePath, fileDetails] of Object.entries(lineSpecificCoverage.fileDetails)) {
-            const filePercent = fileDetails.totalChangedLines > 0
-                ? (fileDetails.coveredChangedLines / fileDetails.totalChangedLines * 100).toFixed(2)
-                : '0.00';
+            // Handle potential NaN values
+            let filePercent = '0.00';
+            if (fileDetails.totalChangedLines > 0) {
+                const calculatedPercent = fileDetails.coveredChangedLines / fileDetails.totalChangedLines * 100;
+                filePercent = !isNaN(calculatedPercent) ? calculatedPercent.toFixed(2) : '0.00';
+            }
             
             lineSpecificCoverageText += `| ${filePath} | ${fileDetails.totalChangedLines} | ${fileDetails.coveredChangedLines} | ${filePercent}% |\n`;
         }
@@ -303,21 +323,30 @@ const parseFile = async(file) => {
 }
 
 const setOutputVariables = (overAllCoverageVal, diffCoverageVal, lineSpecificCoverage) => {
-    // Set overall coverage outputs
-    core.setOutput('total-coverage', overAllCoverageVal.line_percent.toFixed(2));
+    // Set overall coverage outputs - handle potential NaN values
+    const totalCoverage = !isNaN(overAllCoverageVal.line_percent)
+        ? overAllCoverageVal.line_percent.toFixed(2)
+        : '0.00';
+    core.setOutput('total-coverage', totalCoverage);
     core.setOutput('lines-covered', overAllCoverageVal.line_covered);
     core.setOutput('lines-missed', overAllCoverageVal.line_missed);
     core.setOutput('total-lines', overAllCoverageVal.line_total);
     
-    // Set diff coverage outputs
-    core.setOutput('diff-coverage', diffCoverageVal.diff_line_percent.toFixed(2));
+    // Set diff coverage outputs - handle potential NaN values
+    const diffCoverage = !isNaN(diffCoverageVal.diff_line_percent)
+        ? diffCoverageVal.diff_line_percent.toFixed(2)
+        : '0.00';
+    core.setOutput('diff-coverage', diffCoverage);
     core.setOutput('diff-lines-covered', diffCoverageVal.diff_line_covered);
     core.setOutput('diff-lines-missed', diffCoverageVal.diff_line_missed);
     core.setOutput('diff-total-lines', diffCoverageVal.diff_line_total);
     
-    // Set line-specific coverage outputs if available
+    // Set line-specific coverage outputs if available - handle potential NaN values
     if (lineSpecificCoverage) {
-        core.setOutput('line-specific-coverage', lineSpecificCoverage.coveragePercentage.toFixed(2));
+        const lineSpecificCoverageValue = !isNaN(lineSpecificCoverage.coveragePercentage)
+            ? lineSpecificCoverage.coveragePercentage.toFixed(2)
+            : '0.00';
+        core.setOutput('line-specific-coverage', lineSpecificCoverageValue);
         core.setOutput('line-specific-covered', lineSpecificCoverage.coveredChangedLines);
         core.setOutput('line-specific-missed', lineSpecificCoverage.missedChangedLines);
         core.setOutput('line-specific-total', lineSpecificCoverage.totalChangedLines);
