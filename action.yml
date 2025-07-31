@@ -30,6 +30,14 @@ inputs:
     description: "Source code directory to match with JaCoCo report paths"
     default: "src"
     required: false
+  use-git-diff:
+    description: "Whether to use git diff for line-specific coverage analysis"
+    default: "false"
+    required: false
+  use-xml:
+    description: "Whether to use XML format for JaCoCo reports"
+    default: "false"
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
@@ -51,3 +59,11 @@ outputs:
     description: 'Number of changed lines missed by tests'
   diff-total-lines:
     description: 'Total number of changed lines'
+  line-specific-coverage:
+    description: 'Coverage percentage for specific changed lines identified by git diff'
+  line-specific-covered:
+    description: 'Number of specific changed lines covered by tests'
+  line-specific-missed:
+    description: 'Number of specific changed lines missed by tests'
+  line-specific-total:
+    description: 'Total number of specific changed lines identified by git diff'
