@@ -12,65 +12,65 @@ const gitDiff = require('./git-diff');
 async function parseJaCoCoXml(xmlFilePath) {
   try {
     if (!xmlFilePath) {
-      core.warning(`No XML file path provided`);
+      console.log(`::warning::No XML file path provided`);
       return null;
     }
     
     // Check if file exists with full path details
     try {
       const fullPath = path.resolve(xmlFilePath);
-      core.info(`Checking XML file at full path: ${fullPath}`);
+      console.log(`::debug::Checking XML file at full path: ${fullPath}`);
       
       if (!fs.existsSync(xmlFilePath)) {
-        core.warning(`XML file not found: ${xmlFilePath}`);
+        console.log(`::warning::XML file not found: ${xmlFilePath}`);
         // List directory contents to help debug
         try {
           const dirPath = path.dirname(xmlFilePath);
-          core.info(`Listing contents of directory: ${dirPath}`);
+          console.log(`::debug::Listing contents of directory: ${dirPath}`);
           const files = fs.readdirSync(dirPath);
-          core.info(`Directory contents: ${JSON.stringify(files)}`);
+          console.log(`::debug::Directory contents: ${JSON.stringify(files)}`);
         } catch (dirError) {
-          core.warning(`Error listing directory: ${dirError.message}`);
+          console.log(`::warning::Error listing directory: ${dirError.message}`);
         }
         return null;
       }
     } catch (pathError) {
-      core.warning(`Error resolving path: ${pathError.message}`);
+      console.log(`::warning::Error resolving path: ${pathError.message}`);
       return null;
     }
     
-    core.info(`Parsing XML file: ${xmlFilePath}`);
+    console.log(`::debug::Parsing XML file: ${xmlFilePath}`);
     const xmlData = fs.readFileSync(xmlFilePath, 'utf8');
     
     // Check if the file is actually XML and log the first few characters
-    core.info(`First 100 characters of file: ${xmlData.substring(0, 100).replace(/\n/g, ' ')}`);
+    console.log(`::debug::First 100 characters of file: ${xmlData.substring(0, 100).replace(/\n/g, ' ')}`);
     if (!xmlData.trim().startsWith('<?xml')) {
-      core.warning(`File does not appear to be XML: ${xmlFilePath}`);
+      console.log(`::warning::File does not appear to be XML: ${xmlFilePath}`);
       return null;
     }
     
     try {
-      core.info(`Attempting to parse XML with xml2js`);
+      console.log(`::debug::Attempting to parse XML with xml2js`);
       const result = await parseStringPromise(xmlData, {
         explicitArray: false,
         mergeAttrs: true,
         explicitRoot: false
       });
       
-      core.info(`Successfully parsed XML file: ${xmlFilePath}`);
-      core.info(`XML structure: ${JSON.stringify(Object.keys(result))}`);
+      console.log(`::debug::Successfully parsed XML file: ${xmlFilePath}`);
+      console.log(`::debug::XML structure: ${JSON.stringify(Object.keys(result))}`);
       
       // Check if it has the expected structure
       if (result.report) {
-        core.info(`Found report element with ${result.report.package ?
+        console.log(`::notice::Found report element with ${result.report.package ?
           (Array.isArray(result.report.package) ? result.report.package.length : 1) : 0} packages`);
       } else {
-        core.warning(`XML doesn't have expected 'report' structure`);
+        console.log(`::warning::XML doesn't have expected 'report' structure`);
       }
       
       return result;
     } catch (parseError) {
-      core.error(`Error parsing XML: ${parseError.message}`);
+      console.log(`::error::Error parsing XML: ${parseError.message}`);
       return null;
     }
     return result;

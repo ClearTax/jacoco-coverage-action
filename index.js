@@ -11,18 +11,18 @@ async function run () {
     
     // Get paths input
     const resultPaths = core.getInput('paths');
-    core.info(`Input paths: ${resultPaths}`);
+    console.log(`::debug::Input paths: ${resultPaths}`);
     const reportPaths = resultPaths.split(",");
-    core.info(`Report paths array: ${JSON.stringify(reportPaths)}`);
+    console.log(`::debug::Report paths array: ${JSON.stringify(reportPaths)}`);
     
     // Check if we should use XML reports
     let useXml = core.getInput('use-xml') === 'true';
-    core.info(`Initial use-xml setting: ${useXml}`);
+    console.log(`::debug::Initial use-xml setting: ${useXml}`);
     
     // Auto-detect XML files if use-xml is not explicitly set to true
     if (!useXml && reportPaths.length > 0 && reportPaths[0].endsWith('.xml')) {
-      core.info(`XML file detected in paths parameter: ${reportPaths[0]}`);
-      core.info('Setting use-xml to true based on file extension');
+      console.log(`::notice::XML file detected in paths parameter: ${reportPaths[0]}`);
+      console.log('::notice::Setting use-xml to true based on file extension');
       useXml = true;
     }
     
@@ -38,19 +38,19 @@ async function run () {
       
       let xmlPathBefore = core.getInput('xml-path-before');
       let xmlPathAfter = core.getInput('xml-path-after');
-      core.info(`XML paths - Before: ${xmlPathBefore || 'none'}, After: ${xmlPathAfter || 'none'}`);
+      console.log(`::debug::XML paths - Before: ${xmlPathBefore || 'none'}, After: ${xmlPathAfter || 'none'}`);
       
       // If xml-path-after is not provided but paths contains an XML file, use that
       if (!xmlPathAfter && reportPaths.length > 0 && reportPaths[0].endsWith('.xml')) {
         xmlPathAfter = reportPaths[0];
-        core.info(`Using XML file from paths parameter: ${xmlPathAfter}`);
+        console.log(`::notice::Using XML file from paths parameter: ${xmlPathAfter}`);
         
         // Check if file exists
         const fs = require('fs');
         if (fs.existsSync(xmlPathAfter)) {
-          core.info(`Confirmed XML file exists: ${xmlPathAfter}`);
+          console.log(`::debug::Confirmed XML file exists: ${xmlPathAfter}`);
         } else {
-          core.warning(`XML file does not exist: ${xmlPathAfter}`);
+          console.log(`::warning::XML file does not exist: ${xmlPathAfter}`);
         }
       }
       
@@ -59,18 +59,18 @@ async function run () {
       }
       
       // Process XML reports and calculate delta coverage
-      core.info('Calling processCoverageReports with XML paths');
+      console.log('::debug::Calling processCoverageReports with XML paths');
       const coverageData = await xmlParser.processCoverageReports(
         xmlPathBefore,
         xmlPathAfter
       );
       
       if (!coverageData) {
-        core.error('Failed to process XML coverage reports');
+        console.log('::error::Failed to process XML coverage reports');
         throw new Error('Failed to process XML coverage reports');
       }
       
-      core.info(`Coverage data received: ${JSON.stringify({
+      console.log(`::debug::Coverage data received: ${JSON.stringify({
         hasAfter: !!coverageData.after,
         hasBefore: !!coverageData.before,
         hasDelta: !!coverageData.delta,

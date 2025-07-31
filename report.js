@@ -15,8 +15,8 @@ const csv = require('csv-parser')
  * @param {string} badgePath - Path to save coverage badge
  */
 const generateXmlReport = async(coverageData, threshold, badgePath) => {
-    core.info(`Generating XML report with threshold: ${threshold}`);
-    core.info(`Coverage data structure: ${JSON.stringify({
+    console.log(`::debug::Generating XML report with threshold: ${threshold}`);
+    console.log(`::debug::Coverage data structure: ${JSON.stringify({
         hasBefore: !!coverageData.before,
         hasAfter: !!coverageData.after,
         hasFilteredBefore: !!coverageData.filteredBefore,
@@ -27,19 +27,19 @@ const generateXmlReport = async(coverageData, threshold, badgePath) => {
     
     // Validate coverage data
     if (!coverageData.after || !coverageData.after.overall) {
-        core.error('Invalid coverage data: missing after.overall');
-        core.info(`Full coverage data: ${JSON.stringify(coverageData)}`);
+        console.log('::error::Invalid coverage data: missing after.overall');
+        console.log(`::debug::Full coverage data: ${JSON.stringify(coverageData)}`);
         throw new Error('Invalid coverage data structure');
     }
     
     // Extract overall coverage values
     const afterCoverage = coverageData.after.overall;
-    core.info(`After coverage: ${JSON.stringify(afterCoverage)}`);
+    console.log(`::debug::After coverage: ${JSON.stringify(afterCoverage)}`);
     
     const lineCoverage = afterCoverage.line.coverage;
     const branchCoverage = afterCoverage.branch.coverage;
     
-    core.info(`Line coverage: ${lineCoverage}, Branch coverage: ${branchCoverage}`);
+    console.log(`::notice::Line coverage: ${lineCoverage.toFixed(2)}%, Branch coverage: ${branchCoverage.toFixed(2)}%`);
     
     // Set output variables
     setXmlOutputVariables(afterCoverage);
@@ -50,8 +50,28 @@ const generateXmlReport = async(coverageData, threshold, badgePath) => {
     // Generate and post PR comment if this is a PR
     const issue_number = github.context.issue.number;
     if (issue_number) {
+        // Add debug info to the PR comment
         let bodyText = await generateXmlMarkdownTable(coverageData, threshold);
-        core.info(bodyText);
+        
+        // Add debug section to PR comment
+        if (core.getInput('use-git-diff') === 'true') {
+            bodyText += "\n\n### Debug Information\n";
+            bodyText += "- Using git diff: Yes\n";
+            bodyText += `- Changed files: ${coverageData.changedFiles.length}\n`;
+            bodyText += `- XML parsing: ${core.getInput('use-xml') === 'true' ? 'Enabled' : 'Auto-detected'}\n`;
+            
+            if (coverageData.changedFiles.length > 0) {
+                bodyText += "\n**Changed Files:**\n";
+                coverageData.changedFiles.slice(0, 10).forEach(file => {
+                    bodyText += `- \`${file}\`\n`;
+                });
+                if (coverageData.changedFiles.length > 10) {
+                    bodyText += `- ... and ${coverageData.changedFiles.length - 10} more\n`;
+                }
+            }
+        }
+        
+        console.log(`::debug::PR comment body: ${bodyText}`);
         
         await replaceComment.default({
             token: core.getInput('token', { required: true }),
@@ -60,10 +80,20 @@ const generateXmlReport = async(coverageData, threshold, badgePath) => {
             issue_number: issue_number,
             body: bodyText
         });
+        
+        console.log(`::notice::Posted coverage report to PR #${issue_number}`);
     }
     
     // Check if coverage meets threshold
     await checkCoverageThreshold({ 'line_percent': lineCoverage }, threshold);
+    
+    // Log summary of results
+    console.log(`::notice::Coverage Summary - Line: ${lineCoverage.toFixed(2)}%, Branch: ${branchCoverage.toFixed(2)}%`);
+    if (coverageData.delta) {
+        const lineDelta = coverageData.delta.line.delta;
+        const branchDelta = coverageData.delta.branch.delta;
+        console.log(`::notice::Delta Coverage - Line: ${lineDelta > 0 ? '+' : ''}${lineDelta.toFixed(2)}%, Branch: ${branchDelta > 0 ? '+' : ''}${branchDelta.toFixed(2)}%`);
+    }
 }
 
 /**
@@ -251,10 +281,17 @@ const formatDelta = (delta) => {
  * @param {Object} coverage - Overall coverage data
  */
 const setXmlOutputVariables = (coverage) => {
-    core.setOutput('total-coverage', coverage.line.coverage.toFixed(2));
-    core.setOutput('lines-covered', coverage.line.covered);
-    core.setOutput('lines-missed', coverage.line.missed);
-    core.setOutput('total-lines', coverage.line.total);
+    const totalCoverage = coverage.line.coverage.toFixed(2);
+    const linesCovered = coverage.line.covered;
+    const linesMissed = coverage.line.missed;
+    const totalLines = coverage.line.total;
+    
+    core.setOutput('total-coverage', totalCoverage);
+    core.setOutput('lines-covered', linesCovered);
+    core.setOutput('lines-missed', linesMissed);
+    core.setOutput('total-lines', totalLines);
+    
+    console.log(`::notice::Setting output variables - total-coverage: ${totalCoverage}%, lines-covered: ${linesCovered}, lines-missed: ${linesMissed}, total-lines: ${totalLines}`);
 }
 
 /**
@@ -263,46 +300,69 @@ const setXmlOutputVariables = (coverage) => {
  * @param {string} badgePath - Path to save badge
  */
 const generateCoverageBadge = (coverage, badgePath) => {
+    const coverageValue = isNaN(coverage) ? '0.00' : coverage.toFixed(2);
+    console.log(`::debug::Generating badge with coverage value: ${coverageValue}`);
+    
     const svgString = gradientBadge({
         subject: 'Coverage',
-        status: String(coverage.toFixed(2)),
+        status: String(coverageValue),
         style: 'flat',
         gradient: ['00f2ff', '3cfa3f'],
     });
 
     if (badgePath && badgePath.length > 0) {
-        core.info(`Write Svg to file ${badgePath}...`);
+        console.log(`::debug::Writing SVG to file ${badgePath}...`);
         fs.writeFileSync(badgePath, svgString);
-        core.info('Badge saved successfully.');
+        console.log('::debug::Badge saved successfully.');
     } else {
-        core.info('Badge path not configured');
+        console.log('::debug::Badge path not configured');
     }
-    core.info(svgString);
+    console.log(`::debug::Badge SVG: ${svgString.substring(0, 100)}...`);
 }
 
 
 const report = async(files, threshold, badgePath) => {
+    console.log(`::debug::Processing coverage report for ${files.length} file(s)`);
+    
     // Get changed files from git diff
     const changedFiles = await gitDiff.getChangedFiles();
+    console.log(`::debug::Found ${changedFiles.size} changed files from git diff`);
     
     // Filter report based on all files
+    console.log(`::debug::Filtering report based on all files`);
     const allModuleCoverage = await filterReport(files);
     
     // Filter coverage data based on changed files
+    console.log(`::debug::Filtering coverage data based on changed files`);
     const changedFilesCoverage = gitDiff.filterCoverageByChangedFiles(allModuleCoverage, changedFiles);
     
     // Calculate overall coverage for all files
+    console.log(`::debug::Calculating overall coverage for all files`);
     const overAllCoverageVal = await overallCoverage(allModuleCoverage);
     
     // Calculate coverage for changed files only (if any)
+    if (changedFiles.size > 0) {
+        console.log(`::debug::Calculating coverage for ${changedFiles.size} changed files`);
+    }
     const changedFilesOverallCoverage = changedFiles.size > 0 ?
         await overallCoverage(changedFilesCoverage) : null;
+    
+    // Log coverage values
+    if (overAllCoverageVal) {
+        console.log(`::notice::Overall coverage: ${overAllCoverageVal.line_percent.toFixed(2)}%`);
+    }
+    if (changedFilesOverallCoverage) {
+        console.log(`::notice::Changed files coverage: ${changedFilesOverallCoverage.line_percent.toFixed(2)}%`);
+    }
     
     setOutputVariables(overAllCoverageVal);
     
     const issue_number = github.context.issue.number;
 
     if (issue_number) {
+        console.log(`::debug::Generating markdown table for PR #${issue_number}`);
+        
+        // Add debug info to the PR comment
         let bodyText = await markdownTable(
             allModuleCoverage,
             overAllCoverageVal,
@@ -310,34 +370,55 @@ const report = async(files, threshold, badgePath) => {
             changedFilesCoverage,
             changedFilesOverallCoverage
         );
-        core.info(bodyText)
-        core.info(issue_number)
-        core.info(github.context.repo.repo)
-        core.info(github.context.repo.owner)
+        
+        // Add debug section to PR comment if git diff is enabled
+        if (core.getInput('use-git-diff') === 'true') {
+            bodyText += "\n\n### Debug Information\n";
+            bodyText += "- Using git diff: Yes\n";
+            bodyText += `- Changed files: ${changedFiles.size}\n`;
+            bodyText += `- XML parsing: ${core.getInput('use-xml') === 'true' ? 'Enabled' : 'Auto-detected'}\n`;
+            
+            if (changedFiles.size > 0) {
+                bodyText += "\n**Changed Files:**\n";
+                Array.from(changedFiles).slice(0, 10).forEach(file => {
+                    bodyText += `- \`${file}\`\n`;
+                });
+                if (changedFiles.size > 10) {
+                    bodyText += `- ... and ${changedFiles.size - 10} more\n`;
+                }
+            }
+        }
+        
+        console.log(`::debug::Posting comment to PR #${issue_number}`);
         await replaceComment.default({
             token: core.getInput('token', { required: true }),
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             issue_number: issue_number,
             body: bodyText
-        })
+        });
+        
+        console.log(`::notice::Posted coverage report to PR #${issue_number}`);
     }
+    // Generate coverage badge
+    console.log(`::debug::Generating coverage badge`);
+    const coverageValue = isNaN(overAllCoverageVal['line_percent']) ?
+        '0.00' : overAllCoverageVal['line_percent'].toFixed(2);
+    
     const svgString = gradientBadge({
         subject: 'Coverage',
-        status: String(overAllCoverageVal['line_percent'].toFixed(2)),
-        style: 'flat', 
+        status: String(coverageValue),
+        style: 'flat',
         gradient: ['00f2ff', '3cfa3f'],
     });
 
-    if (badgePath && badgePath.length>0) {
-        core.info(`Write Svg to file ${badgePath}...`)
-        fs.writeFileSync(badgePath, svgString)
-        core.info('Badge saved succesfully.')
+    if (badgePath && badgePath.length > 0) {
+        console.log(`::debug::Writing badge to ${badgePath}`);
+        fs.writeFileSync(badgePath, svgString);
+        console.log(`::notice::Coverage badge saved to ${badgePath}`);
+    } else {
+        console.log(`::debug::Badge path not configured`);
     }
-    else{
-        core.info('Badge path not configured')
-    }
-    core.info(svgString)
 
 
     await checkCoverageThreshold(overAllCoverageVal, threshold)
@@ -346,12 +427,19 @@ const report = async(files, threshold, badgePath) => {
 const checkCoverageThreshold = async(overAllCoverage, threshold) => {
     const percentage = parseFloat(overAllCoverage['line_percent'])
     threshold = parseFloat(threshold)
-    if (percentage < threshold) {
-        core.setFailed(`Coverage of ${percentage} is below passing threshold of ${threshold}`)
-        return false
+    
+    // Format percentage for display
+    const formattedPercentage = isNaN(percentage) ? '0.00' : percentage.toFixed(2);
+    
+    if (isNaN(percentage) || percentage < threshold) {
+        const message = `Coverage of ${formattedPercentage}% is below passing threshold of ${threshold}%`;
+        console.log(`::error::${message}`);
+        core.setFailed(message);
+        return false;
     }
-    core.info(`Coverage is above passing threshod - ${percentage}`)
-    return true
+    
+    console.log(`::notice::Coverage is above passing threshold - ${formattedPercentage}%`);
+    return true;
 }
 
 const markdownTable = async(
