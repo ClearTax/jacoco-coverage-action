@@ -6,13 +6,13 @@ branding:
   color: green
 inputs:
   paths:
-    description: "Path to jacoco csv report"
-    default: "coverage/coverage.csv"
+    description: "Path to JaCoCo report files (CSV or XML format)"
+    default: "coverage/coverage.xml"
     required: true
   min-coverage:
     description: "The minimum code coverage that is required to pass for overall project"
     default: "90"
-    required: false  
+    required: false
   token:
     description: "Github PAT to create PR comments"
     required: true
@@ -21,6 +21,14 @@ inputs:
     required: false
   report-url:
     description: "URL to the full coverage report"
+    required: false
+  base-ref:
+    description: "Base branch to compare against for diff coverage (default: master)"
+    default: "master"
+    required: false
+  source-dir:
+    description: "Source code directory to match with JaCoCo report paths"
+    default: "src"
     required: false
 runs:
   using: 'node12'
@@ -35,3 +43,11 @@ outputs:
     description: 'Total lines missed by tests'
   total-lines:
     description: 'Total number of lines'
+  diff-coverage:
+    description: 'Coverage percentage for changed lines'
+  diff-lines-covered:
+    description: 'Number of changed lines covered by tests'
+  diff-lines-missed:
+    description: 'Number of changed lines missed by tests'
+  diff-total-lines:
+    description: 'Total number of changed lines'
