@@ -140,6 +140,18 @@ const markdownTable = async(moduleCoverage, overAllCoverage, diffCoverage, thres
         `;
     }
     
+    // Add git diff information to the report
+    let gitDiffText = "";
+    if (core.getInput('use-git-diff') === 'true') {
+        gitDiffText = `
+        ### :clipboard: Git Diff Information
+        
+        Base branch: **${core.getInput('base-ref') || 'master'}**
+        
+        Git diff is being processed to calculate line-specific coverage.
+        `;
+    }
+    
     // Add line-specific coverage details if available
     let lineSpecificCoverageText = "";
     if (lineSpecificCoverage && lineSpecificCoverage.totalChangedLines > 0) {
@@ -178,7 +190,7 @@ const markdownTable = async(moduleCoverage, overAllCoverage, diffCoverage, thres
         failedText = `:x: Coverage of ${lineCoverage} is below passing threshold of ${threshold}`
     }
     
-    const bodyText = [headerText, failedText, tableText, diffCoverageText, lineSpecificCoverageText, divider, reportLink].filter(Boolean).join("\n");
+    const bodyText = [headerText, failedText, tableText, diffCoverageText, lineSpecificCoverageText, gitDiffText, divider, reportLink].filter(Boolean).join("\n");
 
     return bodyText;
 }
