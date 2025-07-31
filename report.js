@@ -203,10 +203,12 @@ const overallCoverage = async(result) => {
         report['branch_covered'] += row['branch_covered']
         report['branch_missed'] += row['branch_missed']
     })
-    report['line_percent'] = 
-        parseFloat(report['line_covered']) / parseFloat(report['line_total']) * 100.0
-    report['branch_percent'] = 
-        parseFloat(report['branch_covered']) / parseFloat(report['branch_total']) * 100.0
+    report['line_percent'] = report['line_total'] > 0
+        ? parseFloat(report['line_covered']) / parseFloat(report['line_total']) * 100.0
+        : 0.0
+    report['branch_percent'] = report['branch_total'] > 0
+        ? parseFloat(report['branch_covered']) / parseFloat(report['branch_total']) * 100.0
+        : 0.0
     return report
 }
 
