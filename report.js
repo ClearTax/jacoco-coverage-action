@@ -22,13 +22,14 @@ const report = async(files, threshold,badgePath) => {
         core.info(issue_number)
         core.info(github.context.repo.repo)
         core.info(github.context.repo.owner)
-        await replaceComment.default({
+        // replaceComment is a no-op when an identical comment exists, so retrying cannot double-post.
+        await withRetry(() => replaceComment.default({
             token: core.getInput('token', { required: true }),
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             issue_number: issue_number,
             body: bodyText
-        })
+        }))
     }
     const svgString = gradientBadge({
         subject: 'Coverage',
@@ -50,6 +51,24 @@ const report = async(files, threshold,badgePath) => {
 
     await checkCoverageThreshold(overAllCoverageVal, threshold)
 }       
+
+// Octokit reports an unparseable GitHub response as a 500, so that case is retried too.
+const isTransient = error => !error.status || error.status >= 500 || error.status === 429
+
+const withRetry = async(fn, attempts = 4, baseDelayMs = 2000) => {
+    for (let attempt = 1; ; attempt++) {
+        try {
+            return await fn()
+        } catch (error) {
+            if (attempt >= attempts || !isTransient(error)) {
+                throw error
+            }
+            const delayMs = baseDelayMs * 2 ** (attempt - 1)
+            core.warning(`Posting the coverage comment failed (attempt ${attempt}/${attempts}): ${error.message}. Retrying in ${delayMs / 1000}s`)
+            await new Promise(resolve => setTimeout(resolve, delayMs))
+        }
+    }
+}
 
 const checkCoverageThreshold = async(overAllCoverage, threshold) => {
     const percentage = parseFloat(overAllCoverage['line_percent'])
@@ -206,3 +225,4 @@ const setOutputVariables = overAllCoverageVal => {
 }
 
 module.exports = report;
+module.exports.withRetry = withRetry;

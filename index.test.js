@@ -67,3 +67,37 @@ describe('input-helper tests', () => {
     })
   
 })
+describe('withRetry', () => {
+    const { withRetry } = report
+
+    beforeEach(() => {
+        jest.spyOn(core, 'warning').mockImplementation(jest.fn())
+    })
+
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+    test('succeeds after a transient failure', async () => {
+        const fn = jest.fn()
+            .mockRejectedValueOnce(Object.assign(new Error('invalid json response body'), { status: 500 }))
+            .mockResolvedValueOnce('posted')
+
+        await expect(withRetry(fn, 4, 0)).resolves.toEqual('posted')
+        expect(fn).toHaveBeenCalledTimes(2)
+    })
+
+    test('gives up after the last attempt', async () => {
+        const fn = jest.fn().mockRejectedValue(Object.assign(new Error('bad gateway'), { status: 502 }))
+
+        await expect(withRetry(fn, 4, 0)).rejects.toThrow('bad gateway')
+        expect(fn).toHaveBeenCalledTimes(4)
+    })
+
+    test('does not retry a client error', async () => {
+        const fn = jest.fn().mockRejectedValue(Object.assign(new Error('forbidden'), { status: 403 }))
+
+        await expect(withRetry(fn, 4, 0)).rejects.toThrow('forbidden')
+        expect(fn).toHaveBeenCalledTimes(1)
+    })
+})
